@@ -1,0 +1,72 @@
+{
+  "name": "auto-translate-json",
+  "displayName": "Auto Translate JSON",
+  "description": "Automatically translates JSON language files to other languages using Google Translate",
+  "version": "0.0.1",
+  "publisher": "No Trees Harmed",
+  "author": {
+    "name": "Jeff Jorczak",
+    "email": "jeff@jorczak.com"
+  },
+  "engines": {
+    "vscode": "^1.45.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onCommand:extension.autotranslate"
+  ],
+  "contributes": {
+    "configuration": {
+      "title": "Auto Translate JSON",
+      "properties": {
+        "googleApiKey": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Your unique API key for the Google Translation service. Request a key [here](https://console.developers.google.com/apis/library/translate.googleapis.com)\n_Example:ARzaSyAdUwZIyfu7FiDQiAlY5iRjHxvGlNQ3z7Y_"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "extension.autotranslate",
+        "title": "Auto Translate"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "resourceExtname == .json",
+          "command": "extension.autotranslate",
+          "group": "translation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "lint": "eslint src --ext ts",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.45.0",
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.11.0",
+    "eslint": "^6.8.0",
+    "@typescript-eslint/parser": "^2.30.0",
+    "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "glob": "^7.1.6",
+    "mocha": "^7.1.2",
+    "typescript": "^3.8.3",
+    "vscode-test": "^1.3.0"
+  },
+  "dependencies": {
+    "@google-cloud/translate": "^5.3.0"
+  }
+}
