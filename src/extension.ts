@@ -18,7 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
       // check that we have a google api key
       var apikey = (await vscode.workspace
         .getConfiguration()
-        .get("googleApiKey")) as string;
+        .get("auto-translate-json.googleApiKey")) as string;
       if (!apikey) {
         vscode.window.showErrorMessage(
           "You must provide a Google API key first in the extension settings."
@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
       // enforce source locale if provided in settings
       var configLocale = (await vscode.workspace
         .getConfiguration()
-        .get("sourceLocale")) as string;
+        .get("auto-translate-json.sourceLocale")) as string;
       if (!configLocale || configLocale !== files.sourceLocale) {
         vscode.window.showErrorMessage(
           "You must use the " +
