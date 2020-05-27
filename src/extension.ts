@@ -51,7 +51,14 @@ export function activate(context: vscode.ExtensionContext) {
       var keepExtras = await askToKeepExtra();
 
       // load source JSON
-      var source = await files.loadJsonFromLocale(files.sourceLocale);
+      try {
+        var source = await files.loadJsonFromLocale(files.sourceLocale);
+      } catch (error) {
+        vscode.window.showErrorMessage(
+          "Source file malfored: " + error.message
+        );
+        return;
+      }
 
       // show status message while running
       var statusMessage = vscode.window.setStatusBarMessage("Translating...");
@@ -61,7 +68,15 @@ export function activate(context: vscode.ExtensionContext) {
       files.targetLocales.forEach(async (locale) => {
         console.log("Translating " + locale);
 
-        var targetOriginal = await files.loadJsonFromLocale(locale);
+        try {
+          var targetOriginal = await files.loadJsonFromLocale(locale);
+        } catch (error) {
+          vscode.window.showErrorMessage(
+            "Error loading '" + locale + "'. Skipping"
+          );
+          return;
+        }
+
         var targetNew: any = {};
 
         // Iterate source terms
@@ -100,7 +115,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 async function askToKeepTranslations() {
   var keepTranslations = true;
-  var optionKeep = "Keep existing translations";
+  var optionKeep = "Keep existing translations (default)";
   var optionReplace = "Replace existing translations";
   await vscode.window
     .showQuickPick([optionKeep, optionReplace])
@@ -118,7 +133,7 @@ async function askToKeepTranslations() {
 
 async function askToKeepExtra() {
   var keepExtra = true;
-  var optionKeep = "Keep extra translations";
+  var optionKeep = "Keep extra translations (default)";
   var optionReplace = "Remove extra translations";
   await vscode.window
     .showQuickPick([optionKeep, optionReplace])

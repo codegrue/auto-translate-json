@@ -34,8 +34,16 @@ export class Files {
 
   async loadJsonFromLocale(locale: string): Promise<any> {
     var filename = this.folderPath + "/" + locale + ".json";
-    const json = await this.readFileAsync(filename);
-    return JSON.parse(json);
+    var data = await this.readFileAsync(filename);
+
+    // handle empty files
+    if (!data) {
+      data = "{}";
+    }
+
+    var json = JSON.parse(data);
+
+    return json;
   }
 
   private async readFileAsync(filename: string): Promise<string> {
