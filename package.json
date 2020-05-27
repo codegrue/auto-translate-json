@@ -2,19 +2,23 @@
   "name": "auto-translate-json",
   "displayName": "Auto Translate JSON",
   "description": "Automatically translates JSON language files to other languages using Google Translate",
-  "version": "0.0.1",
+  "publisher": "Jeff Jorczak",
+  "version": "1.0.0",
+  "license": "MIT",
+  "icon": "images/icon.png",
   "author": {
     "name": "Jeff Jorczak",
     "email": "jeff@jorczak.com"
   },
   "repository": {
+    "type": "git",
     "url": "https://github.com/codegrue/auto-translate-json"
   },
   "engines": {
     "vscode": "^1.45.0"
   },
   "categories": [
-    "Other"
+    "Formatters"
   ],
   "main": "./out/extension.js",
   "activationEvents": [
