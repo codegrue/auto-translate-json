@@ -48,8 +48,8 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       // ask user to pick options
-      var keepTranslations = true; //tODO: await askToKeepTranslations();
-      var keepExtras = true; // TODO: await askToKeepExtra();
+      var keepTranslations = await askToKeepTranslations();
+      var keepExtras = await askToKeepExtra();
 
       // load source JSON
       try {
