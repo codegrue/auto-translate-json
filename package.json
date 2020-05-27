@@ -24,12 +24,12 @@
     "configuration": {
       "title": "Auto Translate JSON",
       "properties": {
-        "sourceLocale": {
+        "auto-translate-json.sourceLocale": {
           "type": "string",
           "default": "en",
           "markdownDescription": "The local to use for generation from. This prevents accidently clicking the wrong file. Leave blank to process from any file."
         },
-        "googleApiKey": {
+        "auto-translate-json.googleApiKey": {
           "type": "string",
           "default": "",
           "markdownDescription": "Your unique API key for the Google Translation service. Request a key [here](https://console.developers.google.com/apis/library/translate.googleapis.com)\n_Example:ARzaSyAdUwZIyfu7FiDQiAlY5iRjHxvGlNQ3z7Y_"
@@ -39,7 +39,7 @@
     "commands": [
       {
         "command": "extension.autotranslate",
-        "title": "Auto Translate"
+        "title": "Auto Translate JSON"
       }
     ],
     "menus": {

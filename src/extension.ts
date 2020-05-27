@@ -65,52 +65,82 @@ export function activate(context: vscode.ExtensionContext) {
       var googleTranslate = new GoogleTranslate(apikey);
 
       // Iterate target Locales
-      files.targetLocales.forEach(async (locale) => {
-        console.log("Translating " + locale);
+      files.targetLocales.forEach(async (targetLocale) => {
+        console.log("Translating " + targetLocale);
 
         try {
-          var targetOriginal = await files.loadJsonFromLocale(locale);
+          var targetOriginal = await files.loadJsonFromLocale(targetLocale);
         } catch (error) {
           vscode.window.showErrorMessage(
-            "Error loading '" + locale + "'. Skipping"
+            "Error loading '" + targetLocale + "'. Skipping"
           );
           return;
         }
 
-        var targetNew: any = {};
-
         // Iterate source terms
-        for (var term in source) {
-          // if we already have a translation, keep it
-          if (keepTranslations && targetOriginal[term]) {
-            targetNew[term] = targetOriginal[term];
-          } else {
-            var value = source[term];
-
-            var translation = await googleTranslate
-              .translateText(value, locale)
-              .catch((err) => vscode.window.showErrorMessage(err));
-
-            targetNew[term] = translation;
-          }
-        }
-
-        if (keepExtras) {
-          // add back in any terms that were not in source
-          for (var term in targetOriginal) {
-            if (!targetNew[term]) {
-              targetNew[term] = targetOriginal[term];
-            }
-          }
-        }
+        var targetNew = await recursiveProcessing(
+          source,
+          targetOriginal,
+          keepTranslations,
+          keepExtras,
+          googleTranslate,
+          targetLocale
+        );
 
         // save target
-        files.saveJsonToLocale(locale, targetNew);
+        files.saveJsonToLocale(targetLocale, targetNew);
       });
 
       statusMessage.dispose();
     }
   );
+
+  async function recursiveProcessing(
+    source: any,
+    original: any,
+    keepTranslations: boolean,
+    keepExtras: boolean,
+    googleTranslate: GoogleTranslate,
+    locale: string
+  ): Promise<any> {
+    var destination: any = {};
+
+    for (var term in source) {
+      var node = source[term];
+
+      if (node instanceof Object && node !== null) {
+        destination[term] = await recursiveProcessing(
+          source[term],
+          original[term],
+          keepTranslations,
+          keepExtras,
+          googleTranslate,
+          locale
+        );
+      } else {
+        // if we already have a translation, keep it
+        if (keepTranslations && original[term]) {
+          destination[term] = original[term];
+        } else {
+          var translation = await googleTranslate
+            .translateText(node, locale)
+            .catch((err) => vscode.window.showErrorMessage(err));
+          destination[term] = translation;
+        }
+      }
+    }
+
+    if (keepExtras) {
+      // add back in any terms that were not in source
+      for (var term in original) {
+        if (!destination[term]) {
+          destination[term] = original[term];
+        }
+      }
+    }
+
+    return destination;
+  }
 }
 
 async function askToKeepTranslations() {

@@ -1,6 +1,6 @@
 # Auto Translate JSON
 
-Adds a menu item to JSON files to allow them to be automatically translates into other languages using Google Translate.
+Adds a menu item to JSON files to automatically translate them into other languages using Google Translate.
 
 ## How it works
 
@@ -8,22 +8,26 @@ Adds a menu item to JSON files to allow them to be automatically translates into
 
 When localizing an application, if you have a folder called something like `translations`, `languages`, or `i18n` that contains JSON files for each language, you can use this extension to right click on your primary language file and automatically create additional translations. It uses the Google Translate API to perform the translations, and you must have your own API key to make the calls.
 
-Just create empty files with the locale names as filenames and this extension will generate their translations. For example, if you want French, create a file `fr.json`.
+Just create empty files with the locale names as filenames and this extension will generate their translations. For example, if you want French, create a file `fr.json`. Right click on `en.json`, pick "Auto Translate JSON" and wallah, you have a version in French.
 
 ## Features
 
 - Option to keep existing translations, to cut down on data processing when adding new terms
-- Option to keep extra translations, if one language has additional items
+- Option to keep extra translations, if one language has additional unique terms
+- Supports nested JSON elements
+- processes all files simultaneously
 
 ## Requirements
 
-Since translation services are not free, you must provide your own Google API key. Luckily they give a decent amount of translations for free. Go here to set up your account and request a key:
+Since translation services are not free, you must provide your own Google API key. Luckily Google gives a decent amount of translations in a trial period. Go here to set up your account and request a key:
 
 <https://console.developers.google.com/apis/library/translate.googleapis.com>
 
+Once you have the key, which look something like "", paste it into the extension settings.
+
 ## Extension Settings
 
-This extension contributes the following settings:
+This extension contributes the following settings (Menu>Preferences>Settings):
 
 - `auto-translate-json.sourceLocale`: A failsafe to prevent processing the wrong file. Defaults to "en" for english. You can change this to any valid two letter locale code you wish to use.
 - `auto-translate-json.googleApiKey`: Enter your Google API key in this setting.
@@ -31,7 +35,6 @@ This extension contributes the following settings:
 ## Limitations
 
 - all files need to be in the same folder. This does not support structures where each language is in it's own subfolder.
-- this does not (yet) support nested terms.
 
 ## Release Notes
 
