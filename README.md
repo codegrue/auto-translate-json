@@ -17,6 +17,31 @@ Just create empty files with the locale names as filenames and this extension wi
 - Supports nested JSON elements
 - processes all files simultaneously
 
+## Getting Started
+
+1. Request a Google Translate API key
+2. Install this extension
+3. Go to VSCode `Settings>Extensions>Auto Translate JSON`
+
+   ![settings](images/settings.png)
+
+4. Enter your Google API API key
+5. (optional) Change the `Source Locale` setting if you don't want English
+6. Create empty files for each locale you want to translate into
+
+   ![files](images/files.png)
+
+7. Right click the source .json file (en.json by default) and pick "Auto Translate JSON"
+8. At the prompt decide if you want to keep existing translations
+
+   ![keep-existing](images/keep-existing.png)
+
+9. At the prompt decide if you want to keep extra translations
+
+   ![keep-existing](images/keep-extra.png)
+
+10. Verify your language files have been updated
+
 ## Requirements
 
 Since translation services are not free, you must provide your own Google API key. Luckily Google gives a decent amount of translations in a trial period. Go here to set up your account and request a key:
@@ -37,6 +62,14 @@ This extension contributes the following settings (Menu>Preferences>Settings):
 - all files need to be in the same folder. This does not support structures where each language is in it's own subfolder.
 
 ## Release Notes
+
+### 1.0.2
+
+Improved Documentation
+
+### 1.0.1
+
+Settings bug fix
 
 ### 1.0.0
 

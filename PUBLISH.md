@@ -1,0 +1,1 @@
+Run 'vsce publish'
