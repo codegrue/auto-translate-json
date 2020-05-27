@@ -3,7 +3,6 @@
   "displayName": "Auto Translate JSON",
   "description": "Automatically translates JSON language files to other languages using Google Translate",
   "version": "0.0.1",
-  "publisher": "No Trees Harmed",
   "author": {
     "name": "Jeff Jorczak",
     "email": "jeff@jorczak.com"
@@ -22,6 +21,11 @@
     "configuration": {
       "title": "Auto Translate JSON",
       "properties": {
+        "sourceLocale": {
+          "type": "string",
+          "default": "en",
+          "markdownDescription": "The local to use for generation from. This prevents accidently clicking the wrong file. Leave blank to process from any file."
+        },
         "googleApiKey": {
           "type": "string",
           "default": "",
@@ -40,7 +44,7 @@
         {
           "when": "resourceExtname == .json",
           "command": "extension.autotranslate",
-          "group": "translation"
+          "group": "navigation"
         }
       ]
     }
