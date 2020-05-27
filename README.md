@@ -16,6 +16,13 @@ Just create empty files with the locale names as filenames and this extension wi
 - Option to keep extra translations, if one language has additional unique terms
 - Supports nested JSON elements
 - processes all files simultaneously
+- For a list of supported languages see <https://cloud.google.com/translate/docs/languages>
+
+## Requirements
+
+Since translation services are not free, you must provide your own Google API key. Luckily Google gives a decent amount of translations in a trial period. Go here to set up your account and request a key:
+
+<https://console.developers.google.com/apis/library/translate.googleapis.com>
 
 ## Getting Started
 
@@ -41,14 +48,6 @@ Just create empty files with the locale names as filenames and this extension wi
    ![keep-existing](images/keep-extra.png)
 
 10. Verify your language files have been updated
-
-## Requirements
-
-Since translation services are not free, you must provide your own Google API key. Luckily Google gives a decent amount of translations in a trial period. Go here to set up your account and request a key:
-
-<https://console.developers.google.com/apis/library/translate.googleapis.com>
-
-Once you have the key, which look something like "", paste it into the extension settings.
 
 ## Extension Settings
 
