@@ -1,10 +1,10 @@
-# Auto Translare JSON README
+# Auto Translate JSON
 
 Adds a menu item to JSON files to allow them to be automatically translates into other languages using Google Translate.
 
 ## How it works
 
-\!\[Demo\]\(images/demo.gif\)
+![demo](images/demo.gif)
 
 When localizing an application, if you have a folder called something like `translations`, `languages`, or `i18n` that contains JSON files for each language, you can use this extension to right click on your primary language file and automatically create additional translations. It uses the Google Translate API to perform the translations, and you must have your own API key to make the calls.
 

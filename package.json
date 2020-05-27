@@ -7,6 +7,9 @@
     "name": "Jeff Jorczak",
     "email": "jeff@jorczak.com"
   },
+  "repository": {
+    "url": "https://github.com/codegrue/auto-translate-json"
+  },
   "engines": {
     "vscode": "^1.45.0"
   },
