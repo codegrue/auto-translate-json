@@ -4,6 +4,7 @@ import * as vscode from "vscode";
 
 import { Files } from "./files";
 import { GoogleTranslate } from "./google";
+import { maxHeaderSize } from "http";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -47,51 +48,50 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       // ask user to pick options
-      var keepTranslations = await askToKeepTranslations();
-      var keepExtras = await askToKeepExtra();
+      var keepTranslations = true; //tODO: await askToKeepTranslations();
+      var keepExtras = true; // TODO: await askToKeepExtra();
 
       // load source JSON
       try {
         var source = await files.loadJsonFromLocale(files.sourceLocale);
       } catch (error) {
-        vscode.window.showErrorMessage(
-          "Source file malfored: " + error.message
-        );
+        showError(error, "Source file malfored");
         return;
       }
 
-      // show status message while running
-      var statusMessage = vscode.window.setStatusBarMessage("Translating...");
       var googleTranslate = new GoogleTranslate(apikey);
 
       // Iterate target Locales
       files.targetLocales.forEach(async (targetLocale) => {
-        console.log("Translating " + targetLocale);
-
         try {
+          var isValid = await googleTranslate.isValidLocale(targetLocale);
+          if (!isValid) {
+            throw Error(targetLocale + " is not supported. Skipping.");
+          }
+
           var targetOriginal = await files.loadJsonFromLocale(targetLocale);
-        } catch (error) {
-          vscode.window.showErrorMessage(
-            "Error loading '" + targetLocale + "'. Skipping"
+
+          // Iterate source terms
+          var targetNew = await recursiveProcessing(
+            source,
+            targetOriginal,
+            keepTranslations,
+            keepExtras,
+            googleTranslate,
+            targetLocale
           );
+
+          // save target
+          files.saveJsonToLocale(targetLocale, targetNew);
+        } catch (error) {
+          showError(error.message);
           return;
         }
 
-        // Iterate source terms
-        var targetNew = await recursiveProcessing(
-          source,
-          targetOriginal,
-          keepTranslations,
-          keepExtras,
-          googleTranslate,
-          targetLocale
-        );
-
-        // save target
-        files.saveJsonToLocale(targetLocale, targetNew);
+        var feedback = "Translated " + targetLocale;
+        console.log(feedback);
+        vscode.window.setStatusBarMessage(feedback, 50);
       });
-
-      statusMessage.dispose();
     }
   );
 
@@ -124,7 +124,7 @@ export function activate(context: vscode.ExtensionContext) {
         } else {
           var translation = await googleTranslate
             .translateText(node, locale)
-            .catch((err) => vscode.window.showErrorMessage(err));
+            .catch((err) => showError(err));
           destination[term] = translation;
         }
       }
@@ -141,6 +141,15 @@ export function activate(context: vscode.ExtensionContext) {
 
     return destination;
   }
+}
+
+function showError(error: Error, prefix: string = "") {
+  var message = error.toString();
+  if (error.message) {
+    message = prefix + error.message;
+  }
+  console.log(message);
+  vscode.window.showErrorMessage(message);
 }
 
 async function askToKeepTranslations() {

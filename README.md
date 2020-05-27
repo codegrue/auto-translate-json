@@ -63,6 +63,10 @@ This extension contributes the following settings (Menu>Preferences>Settings):
 
 ## Release Notes
 
+### 1.0.3
+
+Added error handling for invalid/unsupported locales
+
 ### 1.0.2
 
 Improved Documentation
