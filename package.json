@@ -2,7 +2,7 @@
   "name": "auto-translate-json",
   "displayName": "Auto Translate JSON",
   "description": "Automatically translates JSON language files to other languages using Google Translate",
-  "publisher": "Jeff Jorczak",
+  "publisher": "jeffjorczak",
   "version": "1.0.0",
   "license": "MIT",
   "icon": "images/icon.png",
