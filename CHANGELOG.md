@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.0.6] - 2020-05-28
+
+- fixed continue after wrong locale file bug
+- changed indenting from tabs to double spaces
+
 ## [1.0.5] - 2020-05-28
 
 - fixed crash bug related to deeply nested nodes

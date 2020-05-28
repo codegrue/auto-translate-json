@@ -138,6 +138,7 @@ function getApiKey(): string {
     vscode.window.showErrorMessage(
       "You must provide a Google API key first in the extension settings."
     );
+    return "";
   }
   return apikey;
 }
@@ -152,6 +153,7 @@ function getLocaleSetting(sourceLocale: string): string {
         configLocale +
         ".json file due to your Source Locale setting."
     );
+    return "";
   }
   return configLocale;
 }

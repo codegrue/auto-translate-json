@@ -57,7 +57,7 @@ export class Files {
   saveJsonToLocale(locale: string, file: any) {
     var filename = this.folderPath + "/" + locale + ".json";
 
-    var data = JSON.stringify(file, null, " ");
+    var data = JSON.stringify(file, null, "  ");
 
     fs.writeFileSync(filename, data, "utf8");
   }

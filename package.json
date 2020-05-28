@@ -3,7 +3,7 @@
   "displayName": "Auto Translate JSON",
   "description": "Automatically translates JSON language files to other languages using Google Translate",
   "publisher": "jeffjorczak",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "license": "MIT",
   "icon": "images/icon.png",
   "author": {
