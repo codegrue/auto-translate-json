@@ -1,9 +1,27 @@
 # Change Log
 
-All notable changes to the "translate-json" extension will be documented in this file.
+## [1.0.4] - 2020-05-27
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+- restored commented options
 
-## [Unreleased]
+## [1.0.3] - 2020-05-27
 
-- Initial release
+### Added
+
+- error handling for invalid/unsupported locales
+
+## [1.0.2] - 2020-05-26
+
+### Changed
+
+- Improved Documentation
+
+## [1.0.1] - 2020-05-26
+
+### Fixed
+
+- bug with mismatched setting names
+
+## [1.0.0] - 2020-05-26
+
+- Initial release of auto-translate-json

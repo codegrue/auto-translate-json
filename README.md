@@ -59,25 +59,3 @@ This extension contributes the following settings (Menu>Preferences>Settings):
 ## Limitations
 
 - all files need to be in the same folder. This does not support structures where each language is in it's own subfolder.
-
-## Release Notes
-
-### 1.0.4
-
-restored commented options
-
-### 1.0.3
-
-Added error handling for invalid/unsupported locales
-
-### 1.0.2
-
-Improved Documentation
-
-### 1.0.1
-
-Settings bug fix
-
-### 1.0.0
-
-Initial release of auto-translate-json

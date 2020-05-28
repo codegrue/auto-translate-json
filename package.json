@@ -20,6 +20,12 @@
   "categories": [
     "Formatters"
   ],
+  "keywords": [
+    "translate",
+    "language",
+    "json",
+    "flutter"
+  ],
   "main": "./out/extension.js",
   "activationEvents": [
     "onCommand:extension.autotranslate"
