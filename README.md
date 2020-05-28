@@ -39,9 +39,9 @@ Since translation services are not free, you must provide your own Google API ke
    ![files](images/files.png)
 
 7. Right click the source .json file (en.json by default) and pick "Auto Translate JSON"
-8. At the prompt decide if you want to keep existing translations
+8. At the prompt decide if you want to preserve previously translated values (i.e. not reprocess)
 
-   ![keep-existing](images/keep-existing.png)
+   ![preserve-existing](images/preserve-existing.png)
 
 9. At the prompt decide if you want to keep extra translations
 
