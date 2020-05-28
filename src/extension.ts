@@ -4,7 +4,6 @@ import * as vscode from "vscode";
 
 import { Files } from "./files";
 import { GoogleTranslate } from "./google";
-import { maxHeaderSize } from "http";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed

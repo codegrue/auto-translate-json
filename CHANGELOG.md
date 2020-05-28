@@ -2,11 +2,13 @@
 
 ## [1.0.6] - 2020-05-28
 
+- added support for arguments in text strings which won't get translated
 - fixed continue after wrong locale file bug
 - changed indenting from tabs to double spaces
 
 ## [1.0.5] - 2020-05-28
 
+- added support for named arguments
 - fixed crash bug related to deeply nested nodes
 - added messages for completed locales
 

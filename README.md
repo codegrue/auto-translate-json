@@ -15,6 +15,7 @@ Just create empty files with the locale names as filenames and this extension wi
 - Option to keep existing translations, to cut down on data processing when adding new terms
 - Option to keep extra translations, if one language has additional unique terms
 - Supports nested JSON elements
+- Supports named arguments such as: "Zip code {zip} is in {city}, {state}."
 - processes all files simultaneously
 - For a list of supported languages see <https://cloud.google.com/translate/docs/languages>
 
