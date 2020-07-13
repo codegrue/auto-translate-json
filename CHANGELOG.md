@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.8] - 2020-07-13
+
+- fixed bug on windows by using fsPath instead of path
+
 ## [1.0.7] - 2020-07-13
 
 - added more warnings and error reporting

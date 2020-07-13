@@ -33,14 +33,14 @@ export function activate(context: vscode.ExtensionContext) {
       var filePath: string;
       var files: Files;
       try {
-        filePath = resource.path;
+        filePath = resource.fsPath;
         files = new Files(filePath);
 
         // log locale info
         showMessage("Source locale = " + files.sourceLocale);
         showMessage("Target locales = " + files.targetLocales);
       } catch (error) {
-        showError(error, "Opening Files");
+        showError(error, "Opening Files: ");
         return;
       }
 
