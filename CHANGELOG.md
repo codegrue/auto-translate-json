@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.7] - 2020-07-13
+
+- added more warnings and error reporting
+
 ## [1.0.6] - 2020-05-28
 
 - added support for arguments in text strings which won't get translated
