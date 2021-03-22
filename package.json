@@ -15,7 +15,7 @@
     "url": "https://github.com/codegrue/auto-translate-json"
   },
   "engines": {
-    "vscode": "^1.45.0"
+    "vscode": "^1.54.0"
   },
   "categories": [
     "Formatters"
@@ -71,19 +71,19 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.45.0",
-    "@types/glob": "^7.1.1",
+    "@types/glob": "^7.1.3",
     "@types/mocha": "^7.0.2",
-    "@types/node": "^13.11.0",
-    "eslint": "^6.8.0",
-    "@typescript-eslint/parser": "^2.30.0",
+    "@types/node": "^13.13.47",
+    "@types/vscode": "^1.54.0",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
+    "@typescript-eslint/parser": "^2.30.0",
+    "eslint": "^6.8.0",
     "glob": "^7.1.6",
     "mocha": "^7.1.2",
-    "typescript": "^3.8.3",
-    "vscode-test": "^1.3.0"
+    "typescript": "^3.9.9",
+    "vscode-test": "^1.5.1"
   },
   "dependencies": {
-    "@google-cloud/translate": "^5.3.0"
+    "@google-cloud/translate": "^6.1.0"
   }
 }
