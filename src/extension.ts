@@ -30,6 +30,12 @@ export function activate(context: vscode.ExtensionContext) {
 
       var googleTranslate = new GoogleTranslate(apikey);
 
+      // inform user if runnign the extension from the command bar
+      if (resource == null) { 
+        showMessage("You must run this extension by right clicking on a .json file", ""); 
+        return;
+      }
+
       var filePath: string;
       var files: Files;
       try {
