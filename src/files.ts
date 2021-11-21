@@ -8,7 +8,7 @@ export class Files {
 
   constructor(filePath: string) {
     this.folderPath = path.dirname(filePath);
-    var fileName = path.basename(filePath);
+    const fileName = path.basename(filePath);
     this.sourceLocale = this.getLocaleFromFilename(fileName);
     this.targetLocales = this.getTargetLocales();
   }
@@ -18,12 +18,12 @@ export class Files {
   }
 
   private getTargetLocales(): string[] {
-    var locales = new Array();
+    const locales = new Array();
 
-    var files = fs.readdirSync(this.folderPath);
+    const files = fs.readdirSync(this.folderPath);
 
     files.forEach((file) => {
-      var locale = this.getLocaleFromFilename(file);
+      const locale = this.getLocaleFromFilename(file);
       if (locale !== this.sourceLocale) {
         locales.push(locale);
       }
@@ -33,15 +33,15 @@ export class Files {
   }
 
   async loadJsonFromLocale(locale: string): Promise<any> {
-    var filename = this.folderPath + "/" + locale + ".json";
-    var data = await this.readFileAsync(filename);
+    const filename = this.folderPath + "/" + locale + ".json";
+    let data = await this.readFileAsync(filename);
 
     // handle empty files
     if (!data) {
       data = "{}";
     }
 
-    var json = JSON.parse(data);
+    const json = JSON.parse(data);
 
     return json;
   }
@@ -55,9 +55,9 @@ export class Files {
   }
 
   saveJsonToLocale(locale: string, file: any) {
-    var filename = this.folderPath + "/" + locale + ".json";
+    const filename = this.folderPath + "/" + locale + ".json";
 
-    var data = JSON.stringify(file, null, "  ");
+    const data = JSON.stringify(file, null, "  ");
 
     fs.writeFileSync(filename, data, "utf8");
   }

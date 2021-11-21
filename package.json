@@ -15,7 +15,7 @@
     "url": "https://github.com/codegrue/auto-translate-json"
   },
   "engines": {
-    "vscode": "^1.54.0"
+    "vscode": "^1.62.0"
   },
   "categories": [
     "Formatters"
@@ -37,12 +37,37 @@
         "auto-translate-json.sourceLocale": {
           "type": "string",
           "default": "en",
-          "markdownDescription": "The local to use for generation from. This prevents accidently clicking the wrong file. Leave blank to process from any file."
+          "markdownDescription": "The local to use for generation from. This prevents accidentally clicking the wrong file. Leave blank to process from any file."
         },
         "auto-translate-json.googleApiKey": {
           "type": "string",
           "default": "",
           "markdownDescription": "Your unique API key for the Google Translation service. Request a key [here](https://console.developers.google.com/apis/library/translate.googleapis.com)\n_Example:ARzaSyAdUwZIyfu7FiDQiAlY5iRjHxvGlNQ3z7Y_"
+        },
+        "auto-translate-json.awsRegion": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Your AWS Region"
+        },
+        "auto-translate-json.awsAccessKeyId": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Your AWS Access Key Id"
+        },
+        "auto-translate-json.awsSecretAccessKey": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Your AWS Secret Access Key"
+        },
+        "auto-translate-json.azureSecretKey": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Your Azure Secret Key"
+        },
+        "auto-translate-json.azureRegion": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Your Azure Region"
         }
       }
     },
@@ -71,19 +96,22 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/glob": "^7.1.3",
-    "@types/mocha": "^7.0.2",
-    "@types/node": "^13.13.47",
-    "@types/vscode": "^1.54.0",
-    "@typescript-eslint/eslint-plugin": "^2.30.0",
-    "@typescript-eslint/parser": "^2.30.0",
-    "eslint": "^6.8.0",
-    "glob": "^7.1.6",
-    "mocha": "^7.1.2",
-    "typescript": "^3.9.9",
-    "vscode-test": "^1.5.1"
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.11.9",
+    "@types/vscode": "^1.62.0",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "eslint": "^8.2.0",
+    "glob": "^7.2.0",
+    "mocha": "^9.1.3",
+    "typescript": "^4.5.2",
+    "vscode-test": "^1.6.1"
   },
   "dependencies": {
-    "@google-cloud/translate": "^6.1.0"
+    "@aws-sdk/client-translate": "^3.42.0",
+    "@google-cloud/translate": "^6.3.1",
+    "axios": "^0.24.0",
+    "uuid": "^8.3.2"
   }
 }
