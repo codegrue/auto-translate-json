@@ -43,6 +43,15 @@
           "type": "string",
           "default": "",
           "markdownDescription": "Your unique API key for the Google Translation service. Request a key [here](https://console.developers.google.com/apis/library/translate.googleapis.com)\n_Example:ARzaSyAdUwZIyfu7FiDQiAlY5iRjHxvGlNQ3z7Y_"
+        },
+        "auto-translate-json.mode": {
+          "type": "string",
+          "default": "file",
+          "enum": [
+            "file",
+            "folder"
+          ],
+          "markdownDescription": "\"file\": files in same folder like \"en.json\"...; \"folder\": files in subfolders like \"en/translation.json\""
         }
       }
     },

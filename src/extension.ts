@@ -2,7 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 
-import { Files } from "./files";
+import { Files, IFiles } from "./files";
+import { FolderFiles } from "./folderFiles";
 import { GoogleTranslate } from "./google";
 
 const NAME = "AutoTranslateJSON";
@@ -31,22 +32,21 @@ export function activate(context: vscode.ExtensionContext) {
       var googleTranslate = new GoogleTranslate(apikey);
 
       // inform user if runnign the extension from the command bar
-      if (resource == null) { 
-        showMessage("You must run this extension by right clicking on a .json file", ""); 
+      if (!resource) {
+        showMessage(
+          "You must run this extension by right clicking on a .json file",
+          ""
+        );
         return;
       }
 
-      var filePath: string;
-      var files: Files;
-      try {
-        filePath = resource.fsPath;
-        files = new Files(filePath);
+      var fileMode =
+        (vscode.workspace
+          .getConfiguration()
+          .get("auto-translate-json.mode") as string) ?? "file";
 
-        // log locale info
-        showMessage("Source locale = " + files.sourceLocale);
-        showMessage("Target locales = " + files.targetLocales);
-      } catch (error) {
-        showError(error, "Opening Files: ");
+      const files = readFiles(resource.fsPath, fileMode);
+      if (!files) {
         return;
       }
 
@@ -84,7 +84,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       // Iterate target Locales
-      files.targetLocales.forEach(async (targetLocale) => {
+      files.targetLocales.forEach(async targetLocale => {
         try {
           var isValid = await googleTranslate.isValidLocale(targetLocale);
           if (!isValid) {
@@ -116,6 +116,25 @@ export function activate(context: vscode.ExtensionContext) {
       });
     }
   );
+
+  const readFiles: (filePath: string, mode: string) => IFiles | null = (
+    filePath: string,
+    mode: string
+  ) => {
+    try {
+      const files: IFiles =
+        mode === "file" ? new Files(filePath) : new FolderFiles(filePath);
+
+      // log locale info
+      showMessage("Source locale = " + files.sourceLocale);
+      showMessage("Target locales = " + files.targetLocales);
+
+      return files;
+    } catch (error) {
+      showError(error, "Opening Files: ");
+      return null;
+    }
+  };
 
   async function recurseNode(
     source: any,
@@ -154,7 +173,7 @@ export function activate(context: vscode.ExtensionContext) {
         } else {
           var translation = await googleTranslate
             .translateText(node, locale)
-            .catch((err) => showError(err));
+            .catch(err => showError(err));
           destination[term] = translation;
         }
       }
@@ -202,7 +221,7 @@ async function askToPreservevTranslations(): Promise<boolean | null> {
   var optionReplace = "Retranslate previous translations";
   await vscode.window
     .showQuickPick([optionKeep, optionReplace])
-    .then((selection) => {
+    .then(selection => {
       if (selection === optionReplace) {
         keepTranslations = false;
       }
@@ -219,7 +238,7 @@ async function askToKeepExtra(): Promise<boolean | null> {
   var optionReplace = "Remove extra translations";
   await vscode.window
     .showQuickPick([optionKeep, optionReplace])
-    .then((selection) => {
+    .then(selection => {
       if (selection === optionReplace) {
         keepExtra = false;
       }
