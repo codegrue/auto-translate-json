@@ -1,5 +1,5 @@
-import * as path from "path";
-import * as fs from "fs";
+import * as path from 'path';
+import * as fs from 'fs';
 
 export interface IFiles {
   sourceLocale: string;
@@ -20,19 +20,19 @@ export const readFileAsync: (filename: string) => Promise<string> = (
 export const loadJsonFromLocale: (fileName: string) => Promise<any> = async (
   fileName: string
 ) => {
-  var data = await readFileAsync(fileName);
+  let data = await readFileAsync(fileName);
   // handle empty files
   if (!data) {
-    data = "{}";
+    data = '{}';
   }
 
   return JSON.parse(data);
 };
 
 export const saveJsonToLocale = (filename: string, file: any) => {
-  var data = JSON.stringify(file, null, "  ");
+  let data = JSON.stringify(file, null, '  ');
 
-  fs.writeFileSync(filename, data, "utf8");
+  fs.writeFileSync(filename, data, 'utf8');
 };
 
 export class Files implements IFiles {
@@ -42,22 +42,22 @@ export class Files implements IFiles {
 
   constructor(filePath: string) {
     this.folderPath = path.dirname(filePath);
-    var fileName = path.basename(filePath);
+    let fileName = path.basename(filePath);
     this.sourceLocale = this.getLocaleFromFilename(fileName);
     this.targetLocales = this.getTargetLocales();
   }
 
   private getLocaleFromFilename(fileName: string): string {
-    return fileName.replace(".json", "");
+    return fileName.replace('.json', '');
   }
 
   private getTargetLocales(): string[] {
-    var locales = new Array();
+    let locales = new Array();
 
-    var files = fs.readdirSync(this.folderPath);
+    let files = fs.readdirSync(this.folderPath);
 
-    files.forEach(file => {
-      var locale = this.getLocaleFromFilename(file);
+    files.forEach((file) => {
+      let locale = this.getLocaleFromFilename(file);
       if (locale !== this.sourceLocale) {
         locales.push(locale);
       }
@@ -67,12 +67,12 @@ export class Files implements IFiles {
   }
 
   loadJsonFromLocale(locale: string): Promise<any> {
-    var filename = this.folderPath + "/" + locale + ".json";
+    let filename = this.folderPath + '/' + locale + '.json';
     return loadJsonFromLocale(filename);
   }
 
   saveJsonToLocale(locale: string, file: any) {
-    var filename = this.folderPath + "/" + locale + ".json";
+    let filename = this.folderPath + '/' + locale + '.json';
 
     saveJsonToLocale(filename, file);
   }
