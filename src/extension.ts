@@ -1,12 +1,15 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from "vscode";
+import * as vscode from 'vscode';
+import { Files, IFiles } from './files';
+import { FolderFiles } from './folderFiles';
 
-import { Files, IFiles } from "./files";
-import { FolderFiles } from "./folderFiles";
-import { GoogleTranslate } from "./google";
+import { AWSTranslate } from './aws';
+import { AzureTranslate } from './azure';
+import { GoogleTranslate } from './google';
+import { ITranslate } from './translate.interface';
 
-const NAME = "AutoTranslateJSON";
+const NAME = 'AutoTranslateJSON';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -16,122 +19,176 @@ export function activate(context: vscode.ExtensionContext) {
   console.log('Extension "auto-translate-json" is active');
 
   vscode.commands.registerCommand(
-    "extension.autotranslate",
+    'extension.autotranslate',
     async (resource: vscode.Uri) => {
       // check that we have a google api key
-      var apikey = vscode.workspace
+      const googleApiKey = vscode.workspace
         .getConfiguration()
-        .get("auto-translate-json.googleApiKey") as string;
-      if (!apikey) {
+        .get('auto-translate-json.googleApiKey') as string;
+
+      const awsAccessKeyId = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.awsAccessKeyId') as string;
+
+      const awsSecretAccessKey = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.awsSecretAccessKey') as string;
+
+      const awsRegion = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.awsRegion') as string;
+
+      const azureSecretKey = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.azureSecretKey') as string;
+
+      const azureRegion = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.azureRegion') as string;
+
+      if (
+        !googleApiKey &&
+        !awsAccessKeyId &&
+        !awsSecretAccessKey &&
+        !awsRegion &&
+        !azureSecretKey &&
+        !azureRegion
+      ) {
         showWarning(
-          "You must provide a Google API key first in the extension settings."
+          'You must provide a Google, AWS or Azure parameters first in the extension settings.'
+        );
+
+        return;
+      }
+
+      let translateEngine: ITranslate;
+
+      if (googleApiKey) {
+        translateEngine = new GoogleTranslate(googleApiKey);
+      } else if (awsAccessKeyId && awsSecretAccessKey && awsRegion) {
+        translateEngine = new AWSTranslate(
+          awsAccessKeyId,
+          awsSecretAccessKey,
+          awsRegion
+        );
+      } else if (azureSecretKey && azureRegion) {
+        translateEngine = new AzureTranslate(azureSecretKey, azureRegion);
+      } else {
+        showWarning(
+          'You must provide a Google, AWS or Azure parameters first in the extension settings.'
         );
         return;
       }
 
-      var googleTranslate = new GoogleTranslate(apikey);
-
-      // inform user if runnign the extension from the command bar
-      if (!resource) {
+      // inform user if running the extension from the command bar
+      if (resource === null) {
         showMessage(
-          "You must run this extension by right clicking on a .json file",
-          ""
+          'You must run this extension by right clicking on a .json file',
+          ''
         );
         return;
       }
 
-      var fileMode =
-        (vscode.workspace
-          .getConfiguration()
-          .get("auto-translate-json.mode") as string) ?? "file";
+      const fileMode =
+        (vscode.workspace.getConfiguration().get('auto-translate-json.mode') as
+          | 'file'
+          | 'folder') ?? 'file';
 
       const files = readFiles(resource.fsPath, fileMode);
-      if (!files) {
+      if (files === null) {
         return;
       }
 
       // enforce source locale if provided in settings
-      var configLocale = vscode.workspace
+      const configLocale = vscode.workspace
         .getConfiguration()
-        .get("auto-translate-json.sourceLocale") as string;
+        .get('auto-translate-json.sourceLocale') as string;
       if (!configLocale || configLocale !== files.sourceLocale) {
         showWarning(
-          "You must use the " +
+          'You must use the ' +
             configLocale +
-            ".json file due to your Source Locale setting."
+            '.json file due to your Source Locale setting.'
         );
         return;
       }
 
       // ask user to pick options
-      var keepTranslations = await askToPreservevTranslations();
+      const keepTranslations = await askToPreserveTranslations();
       if (keepTranslations === null) {
-        showWarning("You must select a translations option");
+        showWarning('You must select a translations option');
         return;
       }
-      var keepExtras = await askToKeepExtra();
+      const keepExtras = await askToKeepExtra();
       if (keepExtras === null) {
-        showWarning("You must select a keep option");
+        showWarning('You must select a keep option');
         return;
       }
 
       // load source JSON
+      let source: any;
       try {
-        var source = await files.loadJsonFromLocale(files.sourceLocale);
+        source = await files.loadJsonFromLocale(files.sourceLocale);
       } catch (error) {
-        showError(error, "Source file malfored");
+        if (error instanceof Error) {
+          showError(error, 'Source file malformed');
+        }
         return;
       }
 
       // Iterate target Locales
-      files.targetLocales.forEach(async targetLocale => {
+      files.targetLocales.forEach(async (targetLocale) => {
         try {
-          var isValid = await googleTranslate.isValidLocale(targetLocale);
+          const isValid = await translateEngine.isValidLocale(targetLocale);
           if (!isValid) {
-            throw Error(targetLocale + " is not supported. Skipping.");
+            throw Error(targetLocale + ' is not supported. Skipping.');
           }
 
-          var targetOriginal = await files.loadJsonFromLocale(targetLocale);
+          const targetOriginal = await files.loadJsonFromLocale(targetLocale);
 
           // Iterate source terms
-          var targetNew = await recurseNode(
+          const targetNew = await recurseNode(
             source,
             targetOriginal,
             keepTranslations,
             keepExtras,
+            files.sourceLocale,
             targetLocale,
-            googleTranslate
+            translateEngine
           );
 
           // save target
           files.saveJsonToLocale(targetLocale, targetNew);
 
-          var feedback = "Translated locale '" + targetLocale + "'";
+          const feedback = "Translated locale '" + targetLocale + "'";
           console.log(feedback);
           vscode.window.showInformationMessage(feedback);
         } catch (error) {
-          showError(error.message);
+          if (error instanceof Error) {
+            showError(error);
+          }
           return;
         }
       });
     }
   );
 
-  const readFiles: (filePath: string, mode: string) => IFiles | null = (
+  const readFiles: (
     filePath: string,
-    mode: string
-  ) => {
+    mode: 'file' | 'folder'
+  ) => IFiles | null = (filePath: string, mode: string) => {
     try {
       const files: IFiles =
-        mode === "file" ? new Files(filePath) : new FolderFiles(filePath);
+        mode === 'file' ? new Files(filePath) : new FolderFiles(filePath);
 
       // log locale info
-      showMessage("Source locale = " + files.sourceLocale);
-      showMessage("Target locales = " + files.targetLocales);
+      showMessage('Source locale = ' + files.sourceLocale);
+      showMessage('Target locales = ' + files.targetLocales);
 
       return files;
     } catch (error) {
-      showError(error, "Opening Files: ");
+      if (error instanceof Error) {
+        showError(error, 'Opening Files: ');
+      }
       return null;
     }
   };
@@ -141,10 +198,11 @@ export function activate(context: vscode.ExtensionContext) {
     original: any,
     keepTranslations: boolean | null,
     keepExtras: boolean | null,
+    sourceLocale: string,
     locale: string,
-    googleTranslate: GoogleTranslate
+    googleTranslate: ITranslate
   ): Promise<any> {
-    var destination: any = {};
+    const destination: any = {};
 
     // defaults
     if (keepTranslations === null) {
@@ -154,8 +212,8 @@ export function activate(context: vscode.ExtensionContext) {
       keepExtras = true;
     }
 
-    for (var term in source) {
-      var node = source[term];
+    for (const term in source) {
+      const node = source[term];
 
       if (node instanceof Object && node !== null) {
         destination[term] = await recurseNode(
@@ -163,6 +221,7 @@ export function activate(context: vscode.ExtensionContext) {
           original[term] ?? {},
           keepTranslations,
           keepExtras,
+          sourceLocale,
           locale,
           googleTranslate
         );
@@ -171,9 +230,9 @@ export function activate(context: vscode.ExtensionContext) {
         if (keepTranslations && original[term]) {
           destination[term] = original[term];
         } else {
-          var translation = await googleTranslate
-            .translateText(node, locale)
-            .catch(err => showError(err));
+          const translation = await googleTranslate
+            .translateText(node, sourceLocale, locale)
+            .catch((err) => showError(err));
           destination[term] = translation;
         }
       }
@@ -181,7 +240,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     if (keepExtras) {
       // add back in any terms that were not in source
-      for (var term in original) {
+      for (const term in original) {
         if (!destination[term]) {
           destination[term] = original[term];
         }
@@ -192,36 +251,36 @@ export function activate(context: vscode.ExtensionContext) {
   }
 }
 
-function showError(error: Error, prefix: string = "") {
-  var message = error.toString();
+function showError(error: Error, prefix: string = '') {
+  let message = error.toString();
   if (error.message) {
-    message = NAME + ": " + prefix + error.message;
+    message = NAME + ': ' + prefix + error.message;
   } else {
-    message = NAME + ": " + prefix + message;
+    message = NAME + ': ' + prefix + message;
   }
   console.error(message);
   vscode.window.showErrorMessage(message);
 }
 
-function showWarning(message: string, prefix: string = "") {
-  message = NAME + ": " + prefix + message;
+function showWarning(message: string, prefix: string = '') {
+  message = NAME + ': ' + prefix + message;
   console.log(message);
   vscode.window.showWarningMessage(message);
 }
 
-function showMessage(message: string, prefix: string = "") {
-  message = NAME + ": " + prefix + message;
+function showMessage(message: string, prefix: string = '') {
+  message = NAME + ': ' + prefix + message;
   console.log(message);
   vscode.window.showInformationMessage(message);
 }
 
-async function askToPreservevTranslations(): Promise<boolean | null> {
-  var keepTranslations: boolean | null = null;
-  var optionKeep = "Preserve previous translations (default)";
-  var optionReplace = "Retranslate previous translations";
+async function askToPreserveTranslations(): Promise<boolean | null> {
+  let keepTranslations: boolean | null = null;
+  const optionKeep = 'Preserve previous translations (default)';
+  const optionReplace = 'Retranslate previous translations';
   await vscode.window
     .showQuickPick([optionKeep, optionReplace])
-    .then(selection => {
+    .then((selection) => {
       if (selection === optionReplace) {
         keepTranslations = false;
       }
@@ -233,12 +292,12 @@ async function askToPreservevTranslations(): Promise<boolean | null> {
 }
 
 async function askToKeepExtra(): Promise<boolean | null> {
-  var keepExtra: boolean | null = null;
-  var optionKeep = "Keep extra translations (default)";
-  var optionReplace = "Remove extra translations";
+  let keepExtra: boolean | null = null;
+  const optionKeep = 'Keep extra translations (default)';
+  const optionReplace = 'Remove extra translations';
   await vscode.window
     .showQuickPick([optionKeep, optionReplace])
-    .then(selection => {
+    .then((selection) => {
       if (selection === optionReplace) {
         keepExtra = false;
       }

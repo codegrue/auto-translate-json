@@ -1,6 +1,6 @@
-import * as path from "path";
-import * as fs from "fs";
-import { IFiles, loadJsonFromLocale, saveJsonToLocale } from "./files";
+import * as path from 'path';
+import * as fs from 'fs';
+import { IFiles, loadJsonFromLocale, saveJsonToLocale } from './files';
 
 export class FolderFiles implements IFiles {
   folderPath: string;
@@ -24,11 +24,11 @@ export class FolderFiles implements IFiles {
   }
 
   private getTargetLocales(): string[] {
-    var files = fs
+    let files = fs
       .readdirSync(this.folderPath)
-      .map(folder => path.basename(folder))
-      .map(locale => (locale !== this.sourceLocale ? locale : ""))
-      .filter(x => x); // do not want empty strings
+      .map((folder) => path.basename(folder))
+      .map((locale) => (locale !== this.sourceLocale ? locale : ''))
+      .filter((x) => x); // do not want empty strings
 
     return files;
   }

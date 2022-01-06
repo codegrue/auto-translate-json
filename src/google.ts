@@ -1,61 +1,173 @@
-const { Translate } = require("@google-cloud/translate").v2;
-export class GoogleTranslate {
-  apikey: string;
-  googleTranslate: any;
+import { ITranslate } from './translate.interface';
+
+import { TranslationServiceClient } from '@google-cloud/translate';
+const supportedLanguages = [
+  'af',
+  'sq',
+  'am',
+  'ar',
+  'hy',
+  'az',
+  'eu',
+  'be',
+  'bn',
+  'bs',
+  'bg',
+  'ca',
+  'ceb',
+  'zh-CN',
+  'zh',
+  'zh-TW',
+  'co',
+  'hr',
+  'cs',
+  'da',
+  'nl',
+  'en',
+  'eo',
+  'et',
+  'fi',
+  'fr',
+  'fy',
+  'gl',
+  'ka',
+  'de',
+  'el',
+  'gu',
+  'ht',
+  'ha',
+  'haw',
+  'he',
+  'iw',
+  'hi',
+  'hmn',
+  'hu',
+  'is',
+  'ig',
+  'id',
+  'ga',
+  'it',
+  'ja',
+  'jv',
+  'kn',
+  'kk',
+  'km',
+  'rw',
+  'ko',
+  'ku',
+  'ky',
+  'lo',
+  'lv',
+  'lt',
+  'lb',
+  'mk',
+  'mg',
+  'ms',
+  'ml',
+  'mt',
+  'mi',
+  'mr',
+  'mn',
+  'my',
+  'ne',
+  'no',
+  'ny',
+  'or',
+  'ps',
+  'fa',
+  'pl',
+  'pt',
+  'pa',
+  'ro',
+  'ru',
+  'sm',
+  'gd',
+  'sr',
+  'st',
+  'sn',
+  'sd',
+  'si',
+  'sk',
+  'sl',
+  'so',
+  'es',
+  'su',
+  'sw',
+  'sv',
+  'tl',
+  'tg',
+  'ta',
+  'tt',
+  'te',
+  'th',
+  'tr',
+  'tk',
+  'uk',
+  'ur',
+  'ug',
+  'uz',
+  'vi',
+  'cy',
+  'xh',
+  'yi',
+  'yo',
+  'zu'
+];
+export class GoogleTranslate implements ITranslate {
+  private apikey: string;
+  private googleTranslate: any;
 
   constructor(apikey: string) {
     this.apikey = apikey;
-    this.googleTranslate = new Translate({ key: this.apikey });
+    this.googleTranslate = new TranslationServiceClient({ key: this.apikey });
+    this.googleTranslate.getLanguages();
   }
 
-  async isValidLocale(targetLocale: string): Promise<boolean> {
-    try {
-      await this.googleTranslate.translate("test", targetLocale);
-    } catch (error) {
-      if (error.message === "Invalid Value") {
-        return false;
-      }
-      throw error;
-    }
-
-    return true;
+  isValidLocale(targetLocale: string): boolean {
+    return supportedLanguages.includes(targetLocale);
   }
 
-  async translateText(text: string, targetLocale: string): Promise<string> {
-    var pattern = /{(.*?)}/g;
-    var args = text.match(pattern);
+  async translateText(
+    text: string,
+    _sourceLocale: string,
+    targetLocale: string
+  ): Promise<string> {
+    const pattern = /{(.*?)}/g;
+    const args = text.match(pattern);
 
     // replace arguments with numbers
     if (args) {
-      var i = 0;
+      let i = 0;
       for (let arg of args) {
-        text = text.replace(arg, "{" + i + "}");
+        text = text.replace(arg, '{' + i + '}');
         i++;
       }
     }
 
-    var result = "";
+    let result = '';
 
     try {
-      var translations = await this.googleTranslate.translate(
+      const translations = await this.googleTranslate.translateText(
         text,
         targetLocale
       );
       result = translations[0];
     } catch (error) {
-      var message = error.message;
-      if (error.message === "Invalid Value") {
-        message = "Invalid Locale " + targetLocale;
+      if (error instanceof Error) {
+        let message = error.message;
+        if (error.message === 'Invalid Value') {
+          message = 'Invalid Locale ' + targetLocale;
+        }
+        console.log(message);
       }
-      console.log(message);
-      return "";
+      return '';
     }
 
     // replace arguments with numbers
     if (args) {
-      var i = 0;
+      let i = 0;
       for (let arg of args) {
-        result = result.replace("{" + i + "}", arg);
+        result = result.replace('{' + i + '}', arg);
         i++;
       }
     }
