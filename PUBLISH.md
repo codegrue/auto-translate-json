@@ -5,7 +5,8 @@
 - Run 'vsce publish'
 - verify at: <https://marketplace.visualstudio.com/items?itemName=jeffjorczak.auto-translate-json>
 
-# Bild Steps
+## Build Steps
+
 - npm install
 - npm install -g vsce
 - vsce package

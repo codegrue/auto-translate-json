@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.1.0] - 2022-01-06
+
+- Added support for AWS and Azure Translation Services (thanks topce)
+- Skip tranlation of  numbers or booleans (thanks gajo357)
+- Added support for deeper folder structures  (thanks gajo357)
+
 ## [1.0.9] - 2021-03-22
 
 - Added a warning if running this from the command prompt
