@@ -15,7 +15,7 @@
     "url": "https://github.com/codegrue/auto-translate-json"
   },
   "engines": {
-    "vscode": "^1.54.0"
+    "vscode": "^1.63.1"
   },
   "categories": [
     "Formatters"
