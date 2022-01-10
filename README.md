@@ -29,7 +29,6 @@ Just create empty files with the locale names as filenames and this extension wi
 Since translation services are not free, you must provide your own API key.
 
 For Google API key you need to provide just API key. Luckily Google gives a decent amount of translations in a trial period. Go here to set up your account and request a key:
-
 <https://console.developers.google.com/apis/library/translate.googleapis.com>
 
 For AWS you need to provide your access key and secret key. Go here to set up your account and request an access key and secret key and region to use:
@@ -40,7 +39,7 @@ For Azure you need to provide your subscription key and region. Go here to set u
 
 ## Getting Started
 
-1. Request a Google/AWS/Azure  Translate API key
+1. Request a Google/AWS/Azure Translate API key
 2. Install this extension
 3. Go to VSCode `Settings>Extensions>Auto Translate JSON`
 
@@ -49,7 +48,7 @@ For Azure you need to provide your subscription key and region. Go here to set u
 4. Enter your Google/AWS/Azure API key / access key / subscription key / region
 5. (optional) Change the `Source Locale` setting if you don't want English
 6. Create empty files for each locale you want to translate into.
-Locale should correspond to the language code used by the translation service. For example, if you want French, create a file `fr.json`.If you use Azure and want to translate into Serbian , create a file `sr-Cyrl.json` for Serbian Cyrillic translation or `sr-Latn.json` for Serbian Latin translation.If you use AWS or Google and want to translate into Serbian , create a file `sr.json` for Serbian translation.
+   Locale should correspond to the language code used by the translation service. For example, if you want French, create a file `fr.json`.If you use Azure and want to translate into Serbian , create a file `sr-Cyrl.json` for Serbian Cyrillic translation or `sr-Latn.json` for Serbian Latin translation.If you use AWS or Google and want to translate into Serbian , create a file `sr.json` for Serbian translation.
 
    ![files](images/files.png)
 
@@ -72,7 +71,6 @@ This extension contributes the following settings (Menu>Preferences>Settings):
 
 - `auto-translate-json.mode`: \"file\": files in same folder like \"en.json\"...; \"folder\": files in subfolders like \"en/translation.json\
 
-
 ### Google
 
 - `auto-translate-json.googleApiKey`: Enter your Google API key in this setting.
@@ -93,9 +91,7 @@ This extension contributes the following settings (Menu>Preferences>Settings):
 
 ## Limitations
 
-- all files need to be in the same folder. This does not support structures where each language is in it's own subfolder.
-
-- files must be named with the locale code that may be different depending on the translation service that you use.Please see the supported languages above.
+- files must be named with the locale code that may be different depending on the translation service that you use. Please see the supported languages above.
 
 ### Prices
 

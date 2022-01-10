@@ -10,4 +10,3 @@
 - npm install
 - npm install -g vsce
 - vsce package
-- you can use auto-translate-json-1.0.9.vsix to test extension
