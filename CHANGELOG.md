@@ -1,10 +1,14 @@
 # Change Log
 
+## [1.1.1] - 2022-01-13
+
+- AWS and Azure, Preprocess text prior to sending as it was for Google (thanks topce)
+
 ## [1.1.0] - 2022-01-06
 
 - Added support for AWS and Azure Translation Services (thanks topce)
-- Skip tranlation of  numbers or booleans (thanks gajo357)
-- Added support for deeper folder structures  (thanks gajo357)
+- Skip tranlation of numbers or booleans (thanks gajo357)
+- Added support for deeper folder structures (thanks gajo357)
 
 ## [1.0.9] - 2021-03-22
 
