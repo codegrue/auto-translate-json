@@ -4,6 +4,7 @@ import {
   Translate,
   TranslateTextCommandInput
 } from '@aws-sdk/client-translate';
+import { replaceArgumentsWithNumbers, replaceContextVariables } from './util';
 
 const supportedLanguages = [
   'af',
@@ -106,17 +107,27 @@ export class AWSTranslate implements ITranslate {
     sourceLocale: string,
     targetLocale: string
   ): Promise<string> {
+    let args;
+    ({ args, text } = replaceContextVariables(text));
+
+    let result = '';
+
     const params: TranslateTextCommandInput = {
       SourceLanguageCode: sourceLocale,
       TargetLanguageCode: targetLocale,
       Text: text
     };
+
     try {
-      const result = await this.client.translateText(params);
-      return result.TranslatedText as string;
+      const translation = await this.client.translateText(params);
+      result = translation.TranslatedText as string;
     } catch (error) {
       console.log(error);
       return '';
     }
+
+    result = replaceArgumentsWithNumbers(args, result);
+
+    return result;
   }
 }

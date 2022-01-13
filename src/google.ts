@@ -1,6 +1,7 @@
 import { ITranslate } from './translate.interface';
 
 import { TranslationServiceClient } from '@google-cloud/translate';
+import { replaceContextVariables, replaceArgumentsWithNumbers } from './util';
 const supportedLanguages = [
   'af',
   'sq',
@@ -132,17 +133,8 @@ export class GoogleTranslate implements ITranslate {
     _sourceLocale: string,
     targetLocale: string
   ): Promise<string> {
-    const pattern = /{(.*?)}/g;
-    const args = text.match(pattern);
-
-    // replace arguments with numbers
-    if (args) {
-      let i = 0;
-      for (let arg of args) {
-        text = text.replace(arg, '{' + i + '}');
-        i++;
-      }
-    }
+    let args;
+    ({ args, text } = replaceContextVariables(text));
 
     let result = '';
 
@@ -164,13 +156,7 @@ export class GoogleTranslate implements ITranslate {
     }
 
     // replace arguments with numbers
-    if (args) {
-      let i = 0;
-      for (let arg of args) {
-        result = result.replace('{' + i + '}', arg);
-        i++;
-      }
-    }
+    result = replaceArgumentsWithNumbers(args, result);
 
     return result;
   }
