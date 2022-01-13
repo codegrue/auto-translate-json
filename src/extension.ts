@@ -229,7 +229,7 @@ export function activate(context: vscode.ExtensionContext) {
         // if we already have a translation, keep it
         if (keepTranslations && original[term]) {
           destination[term] = original[term];
-        } else if (typeof node === "number" || typeof node === "boolean") {
+        } else if (typeof node === 'number' || typeof node === 'boolean') {
           // numbers and booleans do not need translations
           destination[term] = node;
         } else {
