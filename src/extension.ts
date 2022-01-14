@@ -81,7 +81,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
 
       // inform user if running the extension from the command bar
-      if (resource === null) {
+      if (resource === undefined) {
         showMessage(
           'You must run this extension by right clicking on a .json file',
           ''

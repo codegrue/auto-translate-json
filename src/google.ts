@@ -116,12 +116,12 @@ const supportedLanguages = [
 ];
 export class GoogleTranslate implements ITranslate {
   private apikey: string;
-  private googleTranslate: any;
+  private googleTranslate: TranslationServiceClient;
 
   constructor(apikey: string) {
     this.apikey = apikey;
     this.googleTranslate = new TranslationServiceClient({ key: this.apikey });
-    this.googleTranslate.getLanguages();
+    this.googleTranslate.getSupportedLanguages();
   }
 
   isValidLocale(targetLocale: string): boolean {
@@ -139,11 +139,12 @@ export class GoogleTranslate implements ITranslate {
     let result = '';
 
     try {
-      const translations = await this.googleTranslate.translateText(
-        text,
-        targetLocale
+      const response = await this.googleTranslate.translateText({
+        contents: [text],
+        targetLanguageCode: targetLocale
+      }
       );
-      result = translations[0];
+      result = response[0].toString();
     } catch (error) {
       if (error instanceof Error) {
         let message = error.message;
@@ -151,8 +152,9 @@ export class GoogleTranslate implements ITranslate {
           message = 'Invalid Locale ' + targetLocale;
         }
         console.log(message);
+        return message;
       }
-      return '';
+      return "error";
     }
 
     // replace arguments with numbers
