@@ -1,6 +1,7 @@
 import { ITranslate } from './translate.interface';
 
-import { TranslationServiceClient } from '@google-cloud/translate';
+//const {Translate} = require('@google-cloud/translate').v2;
+import { Translate } from '@google-cloud/translate/build/src/v2';
 import { replaceContextVariables, replaceArgumentsWithNumbers } from './util';
 const supportedLanguages = [
   'af',
@@ -116,12 +117,12 @@ const supportedLanguages = [
 ];
 export class GoogleTranslate implements ITranslate {
   private apikey: string;
-  private googleTranslate: TranslationServiceClient;
+  private googleTranslate:  Translate;
 
   constructor(apikey: string) {
     this.apikey = apikey;
-    this.googleTranslate = new TranslationServiceClient({ key: this.apikey });
-    this.googleTranslate.getSupportedLanguages();
+    this.googleTranslate = new  Translate({ key: this.apikey });
+   // this.googleTranslate.getSupportedLanguages();
   }
 
   isValidLocale(targetLocale: string): boolean {
@@ -139,12 +140,8 @@ export class GoogleTranslate implements ITranslate {
     let result = '';
 
     try {
-      const response = await this.googleTranslate.translateText({
-        contents: [text],
-        targetLanguageCode: targetLocale
-      }
-      );
-      result = response[0].toString();
+      const response = await this.googleTranslate.translate(text, targetLocale);
+      result = response[0];
     } catch (error) {
       if (error instanceof Error) {
         let message = error.message;
