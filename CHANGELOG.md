@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.1.2] - 2022-01-14
+
+- Google changed their authentication so API keys cannot be used anymore. I forced v2 of their library but it's recommended not to use google anymore for this
+- Improved detection if extension is triggered directly instead of by right clicking a file.
+
 ## [1.1.1] - 2022-01-13
 
 - AWS and Azure, Preprocess text prior to sending as it was for Google (thanks topce)
