@@ -99,6 +99,8 @@ This extension contributes the following settings (Menu>Preferences>Settings):
 - `auto-translate-json.startDelimiter`: Start delimiter for named arguments. Defaults to \"{\"
 if you use ngx-transate or ngx-transloco you should use \"{{\"
 
+### End delimiter
+
 - `auto-translate-json.endDelimiter`: End delimiter for named arguments. Defaults to \"}\"
 if you use ngx-transate or ngx-transloco you should use \"}}\"
 
