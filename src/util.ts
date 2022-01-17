@@ -1,15 +1,27 @@
 export class Util {
   private static _startDelimiter = '{';
   private static _endDelimiter = '}';
+  private static pattern = new RegExp(
+    Util._startDelimiter + '(.*?)' + Util._endDelimiter,
+    'g'
+  );
 
   public static set startDelimiter(value: string) {
     Util._startDelimiter = value;
+    // update regex
+    Util.pattern = new RegExp(
+      Util._startDelimiter + '(.*?)' + Util._endDelimiter,
+      'g'
+    );
   }
-
-  // TODO calculate regex once
 
   public static set endDelimiter(value: string) {
     Util._endDelimiter = value;
+    // update regex
+    Util.pattern = new RegExp(
+      Util._startDelimiter + '(.*?)' + Util._endDelimiter,
+      'g'
+    );
   }
   public static replaceArgumentsWithNumbers(
     args: RegExpMatchArray | null,
@@ -29,11 +41,8 @@ export class Util {
   }
 
   public static replaceContextVariables(text: string) {
-    const pattern = new RegExp(
-      Util._startDelimiter + '(.*?)' + Util._endDelimiter,
-      'g'
-    );
-    const args = text.match(pattern);
+    
+    const args = text.match(Util.pattern);
 
     // replace arguments with numbers
     if (args) {
