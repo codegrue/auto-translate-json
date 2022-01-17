@@ -37,7 +37,7 @@
         "auto-translate-json.sourceLocale": {
           "type": "string",
           "default": "en",
-          "markdownDescription": "The local to use for generation from. This prevents accidently clicking the wrong file. Leave blank to process from any file."
+          "markdownDescription": "The local to use for generation from. This prevents accidentally clicking the wrong file. Leave blank to process from any file."
         },
         "auto-translate-json.googleApiKey": {
           "type": "string",
@@ -77,6 +77,16 @@
             "folder"
           ],
           "markdownDescription": "\"file\": files in same folder like \"en.json\"...; \"folder\": files in subfolders like \"en/translation.json\""
+        },
+        "auto-translate-json.startDelimiter": {
+          "type": "string",
+          "default": "{",
+          "markdownDescription": "Start delimiter for named arguments"
+        },
+        "auto-translate-json.endDelimiter": {
+          "type": "string",
+          "default": "}",
+          "markdownDescription": "End delimiter for named arguments"
         }
       }
     },

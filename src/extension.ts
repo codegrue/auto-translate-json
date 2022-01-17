@@ -8,6 +8,7 @@ import { AWSTranslate } from './aws';
 import { AzureTranslate } from './azure';
 import { GoogleTranslate } from './google';
 import { ITranslate } from './translate.interface';
+import { Util } from './util';
 
 const NAME = 'AutoTranslateJSON';
 
@@ -59,6 +60,23 @@ export function activate(context: vscode.ExtensionContext) {
         );
 
         return;
+      }
+
+      // set the delimiters for named arguments
+      const startDelimiter = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.startDelimiter') as string;
+
+      if (startDelimiter) {
+        Util.startDelimiter = startDelimiter;
+      }
+
+      const endDelimiter = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.endDelimiter') as string;
+
+      if (endDelimiter) {
+        Util.endDelimiter = endDelimiter;
       }
 
       let translateEngine: ITranslate;

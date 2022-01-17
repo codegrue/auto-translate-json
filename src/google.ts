@@ -2,7 +2,7 @@ import { ITranslate } from './translate.interface';
 
 //const {Translate} = require('@google-cloud/translate').v2;
 import { Translate } from '@google-cloud/translate/build/src/v2';
-import { replaceContextVariables, replaceArgumentsWithNumbers } from './util';
+import { Util } from './util';
 const supportedLanguages = [
   'af',
   'sq',
@@ -117,12 +117,12 @@ const supportedLanguages = [
 ];
 export class GoogleTranslate implements ITranslate {
   private apikey: string;
-  private googleTranslate:  Translate;
+  private googleTranslate: Translate;
 
   constructor(apikey: string) {
     this.apikey = apikey;
-    this.googleTranslate = new  Translate({ key: this.apikey });
-   // this.googleTranslate.getSupportedLanguages();
+    this.googleTranslate = new Translate({ key: this.apikey });
+    // this.googleTranslate.getSupportedLanguages();
   }
 
   isValidLocale(targetLocale: string): boolean {
@@ -135,7 +135,7 @@ export class GoogleTranslate implements ITranslate {
     targetLocale: string
   ): Promise<string> {
     let args;
-    ({ args, text } = replaceContextVariables(text));
+    ({ args, text } = Util.replaceContextVariables(text));
 
     let result = '';
 
@@ -151,11 +151,11 @@ export class GoogleTranslate implements ITranslate {
         console.log(message);
         return message;
       }
-      return "error";
+      return 'error';
     }
 
     // replace arguments with numbers
-    result = replaceArgumentsWithNumbers(args, result);
+    result = Util.replaceArgumentsWithNumbers(args, result);
 
     return result;
   }
