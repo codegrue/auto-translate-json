@@ -89,6 +89,21 @@ This extension contributes the following settings (Menu>Preferences>Settings):
 
 - `auto-translate-json.azureRegion`: Enter your Azure region in this setting.
 
+### Mode
+
+- `auto-translate-json.mode`: Enter \"file\" if translations are files in same folder like \"en.json\"
+   or \"folder\" if translation files are in sub folders like \"en/translation.json\"
+
+### Start delimiter
+
+- `auto-translate-json.startDelimiter`: Start delimiter for named arguments. Defaults to \"{\"
+if you use ngx-transate or ngx-transloco you should use \"{{\"
+
+### End delimiter
+
+- `auto-translate-json.endDelimiter`: End delimiter for named arguments. Defaults to \"}\"
+if you use ngx-transate or ngx-transloco you should use \"}}\"
+
 ## Limitations
 
 - files must be named with the locale code that may be different depending on the translation service that you use. Please see the supported languages above.

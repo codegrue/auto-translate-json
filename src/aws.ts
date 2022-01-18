@@ -4,7 +4,7 @@ import {
   Translate,
   TranslateTextCommandInput
 } from '@aws-sdk/client-translate';
-import { replaceArgumentsWithNumbers, replaceContextVariables } from './util';
+import { Util } from './util';
 
 const supportedLanguages = [
   'af',
@@ -108,7 +108,7 @@ export class AWSTranslate implements ITranslate {
     targetLocale: string
   ): Promise<string> {
     let args;
-    ({ args, text } = replaceContextVariables(text));
+    ({ args, text } = Util.replaceContextVariables(text));
 
     let result = '';
 
@@ -126,7 +126,7 @@ export class AWSTranslate implements ITranslate {
       return '';
     }
 
-    result = replaceArgumentsWithNumbers(args, result);
+    result = Util.replaceArgumentsWithNumbers(args, result);
 
     return result;
   }

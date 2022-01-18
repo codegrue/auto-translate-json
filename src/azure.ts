@@ -1,5 +1,5 @@
 import { ITranslate } from './translate.interface';
-import { replaceArgumentsWithNumbers, replaceContextVariables } from './util';
+import { Util } from './util';
 
 const axios = require('axios').default;
 const { v4: uuidv4 } = require('uuid');
@@ -125,7 +125,7 @@ export class AzureTranslate implements ITranslate {
     targetLocale: string
   ): Promise<string> {
     let args;
-    ({ args, text } = replaceContextVariables(text));
+    ({ args, text } = Util.replaceContextVariables(text));
 
     let result = '';
 
@@ -153,7 +153,7 @@ export class AzureTranslate implements ITranslate {
     });
     result = response.data;
 
-    result = replaceArgumentsWithNumbers(args, result);
+    result = Util.replaceArgumentsWithNumbers(args, result);
 
     return result;
   }
