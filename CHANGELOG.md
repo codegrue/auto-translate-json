@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.1.3] - 2022-01-31
+
+- Fixed (maybe) pulling proper string out of Azure [topce]
+
 ## [1.1.2] - 2022-01-14
 
 - Google changed their authentication so API keys cannot be used anymore. I forced v2 of their library but it's recommended not to use google anymore for this
