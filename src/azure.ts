@@ -151,7 +151,7 @@ export class AzureTranslate implements ITranslate {
       ],
       responseType: 'json'
     });
-    result = response.data;
+    result = response.data[0].translations[0].text;
 
     result = Util.replaceArgumentsWithNumbers(args, result);
 
