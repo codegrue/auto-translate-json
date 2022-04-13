@@ -218,9 +218,10 @@ export function activate(context: vscode.ExtensionContext) {
     keepExtras: boolean | null,
     sourceLocale: string,
     locale: string,
-    googleTranslate: ITranslate
+    translateEngine: ITranslate,
+    isArray: boolean = false
   ): Promise<any> {
-    const destination: any = {};
+    const destination: any = isArray ? [] : {};
 
     // defaults
     if (keepTranslations === null) {
@@ -241,7 +242,8 @@ export function activate(context: vscode.ExtensionContext) {
           keepExtras,
           sourceLocale,
           locale,
-          googleTranslate
+          translateEngine,
+          node instanceof Array
         );
       } else {
         // if we already have a translation, keep it
@@ -251,7 +253,7 @@ export function activate(context: vscode.ExtensionContext) {
           // numbers and booleans do not need translations
           destination[term] = node;
         } else {
-          const translation = await googleTranslate
+          const translation = await translateEngine
             .translateText(node, sourceLocale, locale)
             .catch((err) => showError(err));
           destination[term] = translation;
