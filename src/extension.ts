@@ -243,7 +243,7 @@ export function activate(context: vscode.ExtensionContext) {
           sourceLocale,
           locale,
           translateEngine,
-          node instanceof Array && node !== null
+          node instanceof Array
         );
       } else {
         // if we already have a translation, keep it
