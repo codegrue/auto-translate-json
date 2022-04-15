@@ -87,6 +87,16 @@
           "type": "string",
           "default": "}",
           "markdownDescription": "End delimiter for named arguments"
+        },
+        "auto-translate-json.deepLProSecretKey": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Your DeepL Pro Secret Key"
+        },
+        "auto-translate-json.deepLFreeSecretKey": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Your DeepL Free Secret Key"
         }
       }
     },
@@ -139,6 +149,7 @@
     "@aws-sdk/client-translate": "^3.45.0",
     "@google-cloud/translate": "^6.3.1",
     "axios": "^0.24.0",
+    "form-data": "^4.0.0",
     "uuid": "^8.3.2",
     "yazl": "^2.5.1"
   }
