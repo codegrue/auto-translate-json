@@ -9,6 +9,7 @@ import { AzureTranslate } from './azure';
 import { GoogleTranslate } from './google';
 import { ITranslate } from './translate.interface';
 import { Util } from './util';
+import { DeepLTranslate } from './deepl';
 
 const NAME = 'AutoTranslateJSON';
 
@@ -43,6 +44,14 @@ export function activate(context: vscode.ExtensionContext) {
         .getConfiguration()
         .get('auto-translate-json.azureSecretKey') as string;
 
+      const deepLProSecretKey = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.deepLProSecretKey') as string;
+
+      const deepLFreeSecretKey = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.deepLFreeSecretKey') as string;
+
       const azureRegion = vscode.workspace
         .getConfiguration()
         .get('auto-translate-json.azureRegion') as string;
@@ -53,7 +62,9 @@ export function activate(context: vscode.ExtensionContext) {
         !awsSecretAccessKey &&
         !awsRegion &&
         !azureSecretKey &&
-        !azureRegion
+        !azureRegion &&
+        !deepLProSecretKey &&
+        !deepLFreeSecretKey
       ) {
         showWarning(
           'You must provide a Google, AWS or Azure parameters first in the extension settings.'
@@ -91,6 +102,10 @@ export function activate(context: vscode.ExtensionContext) {
         );
       } else if (azureSecretKey && azureRegion) {
         translateEngine = new AzureTranslate(azureSecretKey, azureRegion);
+      } else if (deepLFreeSecretKey) {
+        translateEngine = new DeepLTranslate(deepLFreeSecretKey, 'free');
+      } else if (deepLProSecretKey) {
+        translateEngine = new DeepLTranslate(deepLProSecretKey, 'pro');
       } else {
         showWarning(
           'You must provide a Google, AWS or Azure parameters first in the extension settings.'

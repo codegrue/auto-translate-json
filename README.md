@@ -89,6 +89,16 @@ This extension contributes the following settings (Menu>Preferences>Settings):
 
 - `auto-translate-json.azureRegion`: Enter your Azure region in this setting.
 
+### DeepL Free
+
+- `auto-translate-json.deepLFreeSecurityKey`: Enter your DeepL Free security key in this setting.
+
+### DeepL Pro
+
+- `auto-translate-json.deepLProSecurityKey`: Enter your DeepL Pro security key in this setting.
+
+
+
 ### Mode
 
 - `auto-translate-json.mode`: Enter \"file\" if translations are files in same folder like \"en.json\"
@@ -121,6 +131,10 @@ if you use ngx-transate or ngx-transloco you should use \"}}\"
 - Azure
 
 <https://azure.microsoft.com/en-us/pricing/details/cognitive-services/translator/>
+
+- DeepL
+
+<https://www.deepl.com/pro?cta=header-prices>
 
 ### WARNING
 
