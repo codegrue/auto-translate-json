@@ -23,6 +23,7 @@ Just create empty files with the locale names as filenames and this extension wi
 - Google: <https://cloud.google.com/translate/docs/languages>
 - AWS: <https://docs.aws.amazon.com/translate/latest/dg/what-is.html#what-is-languages>
 - Azure: <https://docs.microsoft.com/en-us/azure/cognitive-services/translator/language-support>
+- DeepL: <https://www.deepl.com/docs-api/other-functions/listing-supported-languages/>
 
 ## Requirements
 
