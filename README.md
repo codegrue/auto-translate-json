@@ -38,6 +38,8 @@ For AWS you need to provide your access key and secret key. Go here to set up yo
 For Azure you need to provide your subscription key and region. Go here to set up your account and request a subscription key:
 <https://azure.microsoft.com/en-us/free/>
 
+For DeepL you need to provide your authentication API key. Go here to set up your account and request an API key:<https://www.deepl.com/pro-api?cta=header-pro-api/>
+
 ## Getting Started
 
 1. Request a Google/AWS/Azure Translate API key
