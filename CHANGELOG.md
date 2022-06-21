@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.1.4] - 2022-06-21
+
+- Added support for DeepL [topce]
+- better array handling [topce]
+
 ## [1.1.3] - 2022-01-31
 
 - Fixed (maybe) pulling proper string out of Azure [topce]
