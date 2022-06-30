@@ -1,16 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import { Files, IFiles } from './files';
-import { FolderFiles } from './folderFiles';
-
-import { AWSTranslate } from './aws';
-import { AzureTranslate } from './azure';
-import { GoogleTranslate } from './google';
-import { ITranslate } from './translate.interface';
-import { Util } from './util';
-import { DeepLTranslate } from './deepl';
-
+import { translate, Configuration } from 'auto-translate-json-library';
 const NAME = 'AutoTranslateJSON';
 
 // this method is called when your extension is activated
@@ -23,7 +14,6 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand(
     'extension.autotranslate',
     async (resource: vscode.Uri) => {
-      // check that we have a google api key
       const googleApiKey = vscode.workspace
         .getConfiguration()
         .get('auto-translate-json.googleApiKey') as string;
@@ -73,13 +63,15 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
+      let config: Configuration = {} as Configuration;
+
       // set the delimiters for named arguments
       const startDelimiter = vscode.workspace
         .getConfiguration()
         .get('auto-translate-json.startDelimiter') as string;
 
       if (startDelimiter) {
-        Util.startDelimiter = startDelimiter;
+        config.startDelimiter = startDelimiter;
       }
 
       const endDelimiter = vscode.workspace
@@ -87,25 +79,38 @@ export function activate(context: vscode.ExtensionContext) {
         .get('auto-translate-json.endDelimiter') as string;
 
       if (endDelimiter) {
-        Util.endDelimiter = endDelimiter;
+        config.endDelimiter = endDelimiter;
       }
 
-      let translateEngine: ITranslate;
-
       if (googleApiKey) {
-        translateEngine = new GoogleTranslate(googleApiKey);
+        config.translationKeyInfo = {
+          kind: 'google',
+          apiKey: googleApiKey
+        };
       } else if (awsAccessKeyId && awsSecretAccessKey && awsRegion) {
-        translateEngine = new AWSTranslate(
-          awsAccessKeyId,
-          awsSecretAccessKey,
-          awsRegion
-        );
+        config.translationKeyInfo = {
+          kind: 'aws',
+          accessKeyId: awsAccessKeyId,
+          secretAccessKey: awsSecretAccessKey,
+          region: awsRegion
+        };
+        
       } else if (azureSecretKey && azureRegion) {
-        translateEngine = new AzureTranslate(azureSecretKey, azureRegion);
+        config.translationKeyInfo = {
+          kind: 'azure',
+          secretKey: azureSecretKey,
+          region: azureRegion
+        };
       } else if (deepLFreeSecretKey) {
-        translateEngine = new DeepLTranslate(deepLFreeSecretKey, 'free');
+        config.translationKeyInfo = {
+          kind: 'deepLFree',
+          secretKey: deepLFreeSecretKey
+        };
       } else if (deepLProSecretKey) {
-        translateEngine = new DeepLTranslate(deepLProSecretKey, 'pro');
+        config.translationKeyInfo = {
+          kind: 'deepLPro',
+          secretKey: deepLProSecretKey
+        };
       } else {
         showWarning(
           'You must provide a Google, AWS or Azure parameters first in the extension settings.'
@@ -127,167 +132,40 @@ export function activate(context: vscode.ExtensionContext) {
           | 'file'
           | 'folder') ?? 'file';
 
-      const files = readFiles(resource.fsPath, fileMode);
-      if (files === null) {
-        return;
-      }
+      config.mode = fileMode;    
 
-      // enforce source locale if provided in settings
-      const configLocale = vscode.workspace
+      config.sourceLocale = vscode.workspace
         .getConfiguration()
         .get('auto-translate-json.sourceLocale') as string;
-      if (!configLocale || configLocale !== files.sourceLocale) {
-        showWarning(
-          'You must use the ' +
-            configLocale +
-            '.json file due to your Source Locale setting.'
-        );
-        return;
-      }
-
-      // ask user to pick options
+      
+        // ask user to pick options
       const keepTranslations = await askToPreserveTranslations();
       if (keepTranslations === null) {
         showWarning('You must select a translations option');
         return;
+      }
+      if (keepTranslations) {
+        config.keepTranslations = 'keep';
+      }else {
+        config.keepTranslations = 'retranslate';
       }
       const keepExtras = await askToKeepExtra();
       if (keepExtras === null) {
         showWarning('You must select a keep option');
         return;
       }
-
-      // load source JSON
-      let source: any;
-      try {
-        source = await files.loadJsonFromLocale(files.sourceLocale);
-      } catch (error) {
-        if (error instanceof Error) {
-          showError(error, 'Source file malformed');
-        }
-        return;
+      if (keepExtras) {
+        config.keepExtraTranslations = 'keep';
       }
-
-      // Iterate target Locales
-      files.targetLocales.forEach(async (targetLocale) => {
-        try {
-          const isValid = await translateEngine.isValidLocale(targetLocale);
-          if (!isValid) {
-            throw Error(targetLocale + ' is not supported. Skipping.');
-          }
-
-          const targetOriginal = await files.loadJsonFromLocale(targetLocale);
-
-          // Iterate source terms
-          const targetNew = await recurseNode(
-            source,
-            targetOriginal,
-            keepTranslations,
-            keepExtras,
-            files.sourceLocale,
-            targetLocale,
-            translateEngine
-          );
-
-          // save target
-          files.saveJsonToLocale(targetLocale, targetNew);
-
-          const feedback = "Translated locale '" + targetLocale + "'";
-          console.log(feedback);
-          vscode.window.showInformationMessage(feedback);
-        } catch (error) {
-          if (error instanceof Error) {
-            showError(error);
-          }
-          return;
-        }
-      });
-    }
-  );
-
-  const readFiles: (
-    filePath: string,
-    mode: 'file' | 'folder'
-  ) => IFiles | null = (filePath: string, mode: string) => {
-    try {
-      const files: IFiles =
-        mode === 'file' ? new Files(filePath) : new FolderFiles(filePath);
-
-      // log locale info
-      showMessage('Source locale = ' + files.sourceLocale);
-      showMessage('Target locales = ' + files.targetLocales);
-
-      return files;
-    } catch (error) {
-      if (error instanceof Error) {
-        showError(error, 'Opening Files: ');
-      }
-      return null;
-    }
-  };
-
-  async function recurseNode(
-    source: any,
-    original: any,
-    keepTranslations: boolean | null,
-    keepExtras: boolean | null,
-    sourceLocale: string,
-    locale: string,
-    translateEngine: ITranslate,
-    isArray: boolean = false
-  ): Promise<any> {
-    const destination: any = isArray ? [] : {};
-
-    // defaults
-    if (keepTranslations === null) {
-      keepTranslations = true;
-    }
-    if (keepExtras === null) {
-      keepExtras = true;
-    }
-
-    for (const term in source) {
-      const node = source[term];
-
-      if (node instanceof Object && node !== null) {
-        destination[term] = await recurseNode(
-          node,
-          original[term] ?? {},
-          keepTranslations,
-          keepExtras,
-          sourceLocale,
-          locale,
-          translateEngine,
-          node instanceof Array
-        );
-      } else {
-        // if we already have a translation, keep it
-        if (keepTranslations && original[term]) {
-          destination[term] = original[term];
-        } else if (typeof node === 'number' || typeof node === 'boolean') {
-          // numbers and booleans do not need translations
-          destination[term] = node;
-        } else {
-          const translation = await translateEngine
-            .translateText(node, sourceLocale, locale)
-            .catch((err) => showError(err));
-          destination[term] = translation;
-        }
-      }
-    }
-
-    if (keepExtras) {
-      // add back in any terms that were not in source
-      for (const term in original) {
-        if (!destination[term]) {
-          destination[term] = original[term];
-        }
-      }
-    }
-
-    return destination;
+      else {
+        config.keepExtraTranslations = 'remove';
+      }   
+      await translate(resource.fsPath, config) ;
+ 
+      showMessage('Translations have been added to the file', '');
+    });
+    
   }
-}
 
 function showError(error: Error, prefix: string = '') {
   let message = error.toString();
@@ -345,6 +223,5 @@ async function askToKeepExtra(): Promise<boolean | null> {
     });
   return keepExtra;
 }
-
 // this method is called when your extension is deactivated
 export function deactivate() {}
