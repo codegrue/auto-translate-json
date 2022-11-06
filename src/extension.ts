@@ -57,7 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
         !deepLFreeSecretKey
       ) {
         showWarning(
-          'You must provide a Google, AWS or Azure parameters first in the extension settings.'
+          'You must provide a Google, AWS, Azure or DeepL parameters first in the extension settings.'
         );
 
         return;
