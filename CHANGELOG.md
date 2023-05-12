@@ -1,5 +1,8 @@
 # Change Log
 
+## [1.2.0] - 2023-05-12
+
+- Moved backend code to an external library
 ## [1.1.4] - 2022-06-21
 
 - Added support for DeepL [topce]

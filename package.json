@@ -3,7 +3,7 @@
   "displayName": "Auto Translate JSON",
   "description": "Automatically translates JSON language files to other languages using Google Translate",
   "publisher": "jeffjorczak",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "license": "MIT",
   "icon": "images/icon.png",
   "author": {
@@ -141,15 +141,16 @@
     "@types/vscode": "^1.73.0",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
+    "@vscode/test-electron": "^2.2.0",
     "esbuild": "^0.15.13",
     "eslint": "^8.27.0",
     "glob": "^8.0.3",
     "mocha": "^10.1.0",
     "prettier": "^2.7.1",
-    "typescript": "^4.8.4",
-    "@vscode/test-electron": "^2.2.0"
+    "typescript": "^4.8.4"
   },
   "dependencies": {
-    "auto-translate-json-library": "1.1.5"
+    "auto-translate-json-library": "^1.1.5",
+    "es2020": "^1.1.9"
   }
 }
