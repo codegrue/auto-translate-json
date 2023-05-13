@@ -1,6 +1,6 @@
 # Auto Translate JSON
 
-Adds a menu item to JSON files to automatically translate them into other languages using Google Translate, Aws Translate or Azure Translate.
+Adds a menu item to JSON files to automatically translate them into other languages using Google Translate, Aws Translate, Azure Translate, DeepL or OpenAI.
 
 ## How it works
 
@@ -24,6 +24,7 @@ Just create empty files with the locale names as filenames and this extension wi
 - AWS: <https://docs.aws.amazon.com/translate/latest/dg/what-is.html#what-is-languages>
 - Azure: <https://docs.microsoft.com/en-us/azure/cognitive-services/translator/language-support>
 - DeepL: <https://www.deepl.com/docs-api/other-functions/listing-supported-languages/>
+- OpenAI: <https://platform.openai.com/>
 
 ## Requirements
 
@@ -40,9 +41,12 @@ For Azure you need to provide your subscription key and region. Go here to set u
 
 For DeepL you need to provide your authentication API key. Go here to set up your account and request an API key:<https://www.deepl.com/pro-api?cta=header-pro-api/>
 
+For OpenAI you need to provide just API key.Go here to set up your account and request a key:
+API key:<https://platform.openai.com/>
+
 ## Getting Started
 
-1. Request a Google/AWS/Azure Translate API key
+1. Request a Google/AWS/Azure/DeepL/OpenAI Translate API key
 2. Install this extension
 3. Go to VSCode `Settings>Extensions>Auto Translate JSON`
 
@@ -65,6 +69,7 @@ For DeepL you need to provide your authentication API key. Go here to set up you
    ![keep-existing](images/keep-extra.png)
 
 10. Verify your language files have been updated
+
 
 ## Extension Settings
 
@@ -100,7 +105,9 @@ This extension contributes the following settings (Menu>Preferences>Settings):
 
 - `auto-translate-json.deepLProSecurityKey`: Enter your DeepL Pro security key in this setting.
 
+### Open AI
 
+- `auto-translate-json.openAIKey`: Enter your OpenAI security key in this setting.
 
 ### Mode
 
@@ -121,6 +128,8 @@ if you use ngx-transate or ngx-transloco you should use \"}}\"
 
 - files must be named with the locale code that may be different depending on the translation service that you use. Please see the supported languages above.
 
+- OpenAI currently support only translation from English to other languages!
+
 ### Prices
 
 - Google
@@ -138,6 +147,10 @@ if you use ngx-transate or ngx-transloco you should use \"}}\"
 - DeepL
 
 <https://www.deepl.com/pro?cta=header-prices>
+
+- OpenAI
+
+<https://openai.com/pricing>
 
 ### WARNING
 

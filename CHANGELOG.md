@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.3.0] - 2023-05-13
+
+- Add support to use Artificial Inteligence : OpenAI [topce]
+- update dependecies [topce]
+
 ## [1.2.0] - 2023-05-12
 
 - Moved backend code to an external library

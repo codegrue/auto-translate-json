@@ -46,6 +46,10 @@ export function activate(context: vscode.ExtensionContext) {
         .getConfiguration()
         .get('auto-translate-json.azureRegion') as string;
 
+      const openAIKey = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.openAIKey') as string;
+
       if (
         !googleApiKey &&
         !awsAccessKeyId &&
@@ -54,10 +58,11 @@ export function activate(context: vscode.ExtensionContext) {
         !azureSecretKey &&
         !azureRegion &&
         !deepLProSecretKey &&
-        !deepLFreeSecretKey
+        !deepLFreeSecretKey &&
+        !openAIKey
       ) {
         showWarning(
-          'You must provide a Google, AWS, Azure or DeepL parameters first in the extension settings.'
+          'You must provide a Google, AWS, Azure, DeepL or OpenAI parameters first in the extension settings.'
         );
 
         return;
@@ -94,7 +99,6 @@ export function activate(context: vscode.ExtensionContext) {
           secretAccessKey: awsSecretAccessKey,
           region: awsRegion
         };
-        
       } else if (azureSecretKey && azureRegion) {
         config.translationKeyInfo = {
           kind: 'azure',
@@ -111,9 +115,14 @@ export function activate(context: vscode.ExtensionContext) {
           kind: 'deepLPro',
           secretKey: deepLProSecretKey
         };
+      } else if (openAIKey) {
+        config.translationKeyInfo = {
+          kind: 'openai',
+          apiKey: openAIKey
+        };
       } else {
         showWarning(
-          'You must provide a Google, AWS or Azure parameters first in the extension settings.'
+          'You must provide a Google, AWS, Azure, DeepL or OpenAI parameters first in the extension settings.'
         );
         return;
       }
@@ -132,13 +141,13 @@ export function activate(context: vscode.ExtensionContext) {
           | 'file'
           | 'folder') ?? 'file';
 
-      config.mode = fileMode;    
+      config.mode = fileMode;
 
       config.sourceLocale = vscode.workspace
         .getConfiguration()
         .get('auto-translate-json.sourceLocale') as string;
-      
-        // ask user to pick options
+
+      // ask user to pick options
       const keepTranslations = await askToPreserveTranslations();
       if (keepTranslations === null) {
         showWarning('You must select a translations option');
@@ -146,7 +155,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
       if (keepTranslations) {
         config.keepTranslations = 'keep';
-      }else {
+      } else {
         config.keepTranslations = 'retranslate';
       }
       const keepExtras = await askToKeepExtra();
@@ -156,16 +165,15 @@ export function activate(context: vscode.ExtensionContext) {
       }
       if (keepExtras) {
         config.keepExtraTranslations = 'keep';
-      }
-      else {
+      } else {
         config.keepExtraTranslations = 'remove';
-      }   
-      await translate(resource.fsPath, config) ;
- 
+      }
+      await translate(resource.fsPath, config);
+
       showMessage('Translations have been added to the file', '');
-    });
-    
-  }
+    }
+  );
+}
 
 function showError(error: Error, prefix: string = '') {
   let message = error.toString();
@@ -224,4 +232,4 @@ async function askToKeepExtra(): Promise<boolean | null> {
   return keepExtra;
 }
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
