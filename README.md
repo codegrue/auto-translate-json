@@ -124,6 +124,10 @@ if you use ngx-transate or ngx-transloco you should use \"{{\"
 - `auto-translate-json.endDelimiter`: End delimiter for named arguments. Defaults to \"}\"
 if you use ngx-transate or ngx-transloco you should use \"}}\"
 
+### Ignore prefix
+
+- `auto-translate-json.ignorePrefix`: Translation keys that starts with ignore prefix will be ignored
+
 ## Limitations
 
 - files must be named with the locale code that may be different depending on the translation service that you use. Please see the supported languages above.

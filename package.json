@@ -3,7 +3,7 @@
   "displayName": "Auto Translate JSON",
   "description": "Automatically translates JSON language files to other languages using Google Translate",
   "publisher": "jeffjorczak",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "license": "MIT",
   "icon": "images/icon.png",
   "author": {
@@ -106,6 +106,11 @@
           "type": "string",
           "default": "",
           "markdownDescription": "Your DeepL Free Secret Key"
+        },
+        "auto-translate-json.ignorePrefix": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Ignore prefix for translation key"
         }
       }
     },
@@ -155,7 +160,7 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "auto-translate-json-library": "^1.2.0",
+    "auto-translate-json-library": "1.2.1",
     "es2020": "^1.1.9"
   }
 }

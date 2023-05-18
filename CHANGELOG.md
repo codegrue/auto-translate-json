@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.3.1] - 2023-05-13
+
+- Add support to ignore some translation [topce]
+
 ## [1.3.0] - 2023-05-13
 
 - Add support to use Artificial Inteligence : OpenAI [topce]

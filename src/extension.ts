@@ -87,6 +87,15 @@ export function activate(context: vscode.ExtensionContext) {
         config.endDelimiter = endDelimiter;
       }
 
+      const ignorePrefix = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.ignorePrefix') as string;
+
+      if (ignorePrefix) {
+        config.ignorePrefix = ignorePrefix.trim();
+      }
+
+
       if (googleApiKey) {
         config.translationKeyInfo = {
           kind: 'google',
