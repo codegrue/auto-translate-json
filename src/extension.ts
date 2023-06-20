@@ -91,6 +91,8 @@ export function activate(context: vscode.ExtensionContext) {
         .getConfiguration()
         .get('auto-translate-json.ignorePrefix') as string;
 
+      config.ignorePrefix = '';
+
       if (ignorePrefix) {
         config.ignorePrefix = ignorePrefix.trim();
       }
