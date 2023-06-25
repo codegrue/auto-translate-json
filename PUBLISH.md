@@ -8,5 +8,5 @@
 ## Build Steps
 
 - npm install
-- npm install -g vsce
+- npm i  -g @vscode/vsce
 - vsce package
