@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.3.2] - 2023-06-25
+
+- use new version of library 1.2.2 [topce]
+- improve error logs [topce] 
+- not call process exit in library [topce]
+- update libs dependencies [topce]
+
 ## [1.3.1] - 2023-05-13
 
 - Add support to ignore some translation [topce]
