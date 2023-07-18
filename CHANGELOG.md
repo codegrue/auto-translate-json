@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.3.3] - 2023-06-25
+
+- use new version of library 1.2.3 [topce]
+- fix typo in deepL urls [topce] 
+
 ## [1.3.2] - 2023-06-25
 
 - use new version of library 1.2.2 [topce]
