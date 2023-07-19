@@ -9,4 +9,5 @@
 
 - npm install
 - npm i  -g @vscode/vsce
+- npm run compile
 - vsce package
