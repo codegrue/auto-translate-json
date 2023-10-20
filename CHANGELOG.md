@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.3.4] - 2023-10-20
+
+- use new version of library 1.3.5 [topce]
+- fix error in  deepL  [alexei-petru]
+- load dynamicaly google supported languages [BenGMiles] 
+
 ## [1.3.3] - 2023-06-25
 
 - use new version of library 1.2.3 [topce]
