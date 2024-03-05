@@ -1,5 +1,13 @@
 # Change Log
 
+## [1.3.8] - 2023-10-20
+
+- use new version of library 1.3.8 [topce]
+- add option to fine tune OpenAI parameters
+- possible to use local REST API serveri instead of OpenAI
+- pro less expensive
+- con more slow need powerful hardware
+
 ## [1.3.4] - 2023-10-20
 
 - use new version of library 1.3.5 [topce]

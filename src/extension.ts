@@ -50,6 +50,18 @@ export function activate(context: vscode.ExtensionContext) {
         .getConfiguration()
         .get('auto-translate-json.openAIKey') as string;
 
+      const openAIBaseURL = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.openAIBaseURL') as string;
+
+      const openAIModel = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.openAIModel') as string;
+      
+      const openAIMaxTokens = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.openAIMaxTokens') as number;
+
       if (
         !googleApiKey &&
         !awsAccessKeyId &&
@@ -68,7 +80,7 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
-      let config: Configuration = {} as Configuration;
+      const config: Configuration = {} as Configuration;
 
       // set the delimiters for named arguments
       const startDelimiter = vscode.workspace
@@ -127,9 +139,18 @@ export function activate(context: vscode.ExtensionContext) {
           secretKey: deepLProSecretKey
         };
       } else if (openAIKey) {
+
         config.translationKeyInfo = {
           kind: 'openai',
-          apiKey: openAIKey
+          apiKey: openAIKey,
+          baseUrl: openAIBaseURL,
+          model: openAIModel,
+          maxTokens: openAIMaxTokens,
+          temperature: 0,
+          topP: 1,
+          n: 1,
+          frequencyPenalty: 0,
+          presencePenalty: 0
         };
       } else {
         showWarning(

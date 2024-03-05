@@ -109,6 +109,18 @@ This extension contributes the following settings (Menu>Preferences>Settings):
 
 - `auto-translate-json.openAIKey`: Enter your OpenAI security key in this setting.
 
+### Open AI Local server
+
+- install https://jan.ai/
+- download  model mistral-ins-7b-q4
+- run server http://localhost:1337/v1 with model  mistral-ins-7b-q4
+- set up extension parameters
+- `auto-translate-json.openAIKey`: whatever ;-)
+- `auto-translate-json.openAIBaseURL`: http://localhost:1337/v1
+- `auto-translate-json.model`: mistral-ins-7b-q4
+- `auto-translate-json.maxTokens`: 4096
+We do not pay per token because it runs locally ;-)
+
 ### Mode
 
 - `auto-translate-json.mode`: Enter \"file\" if translations are files in same folder like \"en.json\"
