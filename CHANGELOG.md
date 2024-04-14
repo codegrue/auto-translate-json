@@ -4,15 +4,15 @@
 
 - use new version of library 1.3.8 [topce]
 - add option to fine tune OpenAI parameters
-- possible to use local REST API serveri instead of OpenAI
-- pro less expensive
-- con more slow need powerful hardware
+- possible to use local REST API server instead of OpenAI
+- pro: less expensive
+- con: slower, needs powerful hardware
 
 ## [1.3.4] - 2023-10-20
 
 - use new version of library 1.3.5 [topce]
 - fix error in  deepL  [alexei-petru]
-- load dynamicaly google supported languages [BenGMiles] 
+- load dynamically google supported languages [BenGMiles] 
 
 ## [1.3.3] - 2023-06-25
 
@@ -32,8 +32,8 @@
 
 ## [1.3.0] - 2023-05-13
 
-- Add support to use Artificial Inteligence : OpenAI [topce]
-- update dependecies [topce]
+- Add support to use Artificial Intelligence : OpenAI [topce]
+- update dependencies [topce]
 
 ## [1.2.0] - 2023-05-12
 
@@ -59,7 +59,7 @@
 ## [1.1.0] - 2022-01-06
 
 - Added support for AWS and Azure Translation Services (thanks topce)
-- Skip tranlation of numbers or booleans (thanks gajo357)
+- Skip translation of numbers or booleans (thanks gajo357)
 - Added support for deeper folder structures (thanks gajo357)
 
 ## [1.0.9] - 2021-03-22

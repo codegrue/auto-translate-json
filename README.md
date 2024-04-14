@@ -129,12 +129,12 @@ We do not pay per token because it runs locally ;-)
 ### Start delimiter
 
 - `auto-translate-json.startDelimiter`: Start delimiter for named arguments. Defaults to \"{\"
-if you use ngx-transate or ngx-transloco you should use \"{{\"
+if you use ngx-translate or ngx-transloco you should use \"{{\"
 
 ### End delimiter
 
 - `auto-translate-json.endDelimiter`: End delimiter for named arguments. Defaults to \"}\"
-if you use ngx-transate or ngx-transloco you should use \"}}\"
+if you use ngx-translate or ngx-transloco you should use \"}}\"
 
 ### Ignore prefix
 
@@ -144,7 +144,7 @@ if you use ngx-transate or ngx-transloco you should use \"}}\"
 
 - files must be named with the locale code that may be different depending on the translation service that you use. Please see the supported languages above.
 
-- OpenAI currently support only translation from English to other languages!
+- OpenAI currently supports only translation from English to other languages!
 
 ### Prices
 
