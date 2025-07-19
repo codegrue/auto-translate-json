@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.5.1] - 2025-07-19
+
+- update to use same version like library
+- use new version of library 1.5.1 [topce]
+
 ## [1.3.8] - 2023-10-20
 
 - use new version of library 1.3.8 [topce]
