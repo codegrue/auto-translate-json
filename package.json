@@ -31,104 +31,128 @@
     "auto-translate-json"
   ],
   "main": "./out/extension.js",
-  "activationEvents": [
-    "onCommand:extension.autotranslate"
-  ],
   "contributes": {
-    "configuration": {
-      "title": "Auto Translate JSON",
-      "properties": {
-        "auto-translate-json.sourceLocale": {
-          "type": "string",
-          "default": "en",
-          "markdownDescription": "The local to use for generation from. This prevents accidentally clicking the wrong file. Leave blank to process from any file."
-        },
-        "auto-translate-json.googleApiKey": {
-          "type": "string",
-          "default": "",
-          "markdownDescription": "Your unique API key for the Google Translation service. Request a key [here](https://console.developers.google.com/apis/library/translate.googleapis.com)\n_Example:ARzaSyAdUwZIyfu7FiDQiAlY5iRjHxvGlNQ3z7Y_"
-        },
-        "auto-translate-json.awsRegion": {
-          "type": "string",
-          "default": "",
-          "markdownDescription": "Your AWS Region"
-        },
-        "auto-translate-json.awsAccessKeyId": {
-          "type": "string",
-          "default": "",
-          "markdownDescription": "Your AWS Access Key Id"
-        },
-        "auto-translate-json.awsSecretAccessKey": {
-          "type": "string",
-          "default": "",
-          "markdownDescription": "Your AWS Secret Access Key"
-        },
-        "auto-translate-json.azureSecretKey": {
-          "type": "string",
-          "default": "",
-          "markdownDescription": "Your Azure Secret Key"
-        },
-        "auto-translate-json.azureRegion": {
-          "type": "string",
-          "default": "",
-          "markdownDescription": "Your Azure Region"
-        },
-        "auto-translate-json.openAIKey": {
-          "type": "string",
-          "default": "",
-          "markdownDescription": "Your OpenAI Secret Key"
-        },
-        "auto-translate-json.openAIBaseURL": {
-          "type": "string",
-          "default": "",
-          "markdownDescription": "Your OpenAI Base URL"
-        },
-        "auto-translate-json.openAIModel": {
-          "type": "string",
-          "default": "gpt-3.5-turbo",
-          "markdownDescription": "OpenAI model"
-        },
-        "auto-translate-json.openAIMaxTokens": {
-          "type": "number",
-          "default": 256,
-          "markdownDescription": "OpenAI max tokens"
-        },
-        "auto-translate-json.mode": {
-          "type": "string",
-          "default": "file",
-          "enum": [
-            "file",
-            "folder"
-          ],
-          "markdownDescription": "\"file\": files in same folder like \"en.json\"...; \"folder\": files in subfolders like \"en/translation.json\""
-        },
-        "auto-translate-json.startDelimiter": {
-          "type": "string",
-          "default": "{",
-          "markdownDescription": "Start delimiter for named arguments"
-        },
-        "auto-translate-json.endDelimiter": {
-          "type": "string",
-          "default": "}",
-          "markdownDescription": "End delimiter for named arguments"
-        },
-        "auto-translate-json.deepLProSecretKey": {
-          "type": "string",
-          "default": "",
-          "markdownDescription": "Your DeepL Pro Secret Key"
-        },
-        "auto-translate-json.deepLFreeSecretKey": {
-          "type": "string",
-          "default": "",
-          "markdownDescription": "Your DeepL Free Secret Key"
-        },
-        "auto-translate-json.ignorePrefix": {
-          "type": "string",
-          "default": "",
-          "markdownDescription": "Ignore prefix for translation key"
+    "configuration": [
+      {
+        "title": "Auto Translate JSON",
+        "properties": {
+          "auto-translate-json.sourceLocale": {
+            "type": "string",
+            "default": "en",
+            "markdownDescription": "The local to use for generation from. This prevents accidentally clicking the wrong file. Leave blank to process from any file."
+          },
+          "auto-translate-json.startDelimiter": {
+            "type": "string",
+            "default": "{",
+            "markdownDescription": "Start delimiter for named arguments"
+          },
+          "auto-translate-json.endDelimiter": {
+            "type": "string",
+            "default": "}",
+            "markdownDescription": "End delimiter for named arguments"
+          },
+          "auto-translate-json.ignorePrefix": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Ignore prefix for translation key"
+          }           
+        }
+      },
+      {
+        "title": "Google",
+        "properties": {
+          "auto-translate-json.googleApiKey": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Your unique API key for the Google Translation service. Request a key [here](https://console.developers.google.com/apis/library/translate.googleapis.com)\n_Example:ARzaSyAdUwZIyfu7FiDQiAlY5iRjHxvGlNQ3z7Y_"
+          }
+        }
+      },
+      {
+        "title": "AWS",
+        "properties": {
+          "auto-translate-json.awsRegion": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Your AWS Region"
+          },
+          "auto-translate-json.awsAccessKeyId": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Your AWS Access Key Id"
+          },
+          "auto-translate-json.awsSecretAccessKey": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Your AWS Secret Access Key"
+          }
+        }
+      },
+      {
+        "title": "Azure",
+        "properties": {          
+          "auto-translate-json.azureRegion": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Your Azure Region"
+          },
+          "auto-translate-json.azureSecretKey": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Your Azure Secret Key"
+          }
+        }
+      },
+      {
+        "title": "OpenAI",
+        "properties": {                 
+          "auto-translate-json.openAIKey": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Your OpenAI Secret Key"
+          },
+          "auto-translate-json.openAIBaseURL": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Your OpenAI Base URL"
+          },
+          "auto-translate-json.openAIModel": {
+            "type": "string",
+            "default": "gpt-3.5-turbo",
+            "markdownDescription": "OpenAI model"
+          },
+          "auto-translate-json.openAIMaxTokens": {
+            "type": "number",
+            "default": 256,
+            "markdownDescription": "OpenAI max tokens"
+          },
+          "auto-translate-json.mode": {
+            "type": "string",
+            "default": "file",
+            "enum": [
+              "file",
+              "folder"
+            ],
+            "markdownDescription": "\"file\": files in same folder like \"en.json\"...; \"folder\": files in subfolders like \"en/translation.json\""
+          }
+        }
+      },
+      {
+        "title": "DeepL",
+        "properties": {                 
+          "auto-translate-json.deepLProSecretKey": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Your DeepL Pro Secret Key"
+          },
+          "auto-translate-json.deepLFreeSecretKey": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Your DeepL Free Secret Key"
+          }
         }
       }
-    },
+    ],
     "commands": [
       {
         "command": "extension.autotranslate",
