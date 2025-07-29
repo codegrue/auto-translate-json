@@ -14,6 +14,18 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand(
     'extension.autotranslate',
     async (resource: vscode.Uri) => {
+      // inform user if running the extension from the command bar
+      if (resource === undefined) {
+        showMessage(
+          'You must run this extension by right clicking on a .json file'
+        );
+        return;
+      }
+
+      const apiType = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.apiType') as string;
+
       const googleApiKey = vscode.workspace
         .getConfiguration()
         .get('auto-translate-json.googleApiKey') as string;
@@ -57,127 +69,149 @@ export function activate(context: vscode.ExtensionContext) {
       const openAIModel = vscode.workspace
         .getConfiguration()
         .get('auto-translate-json.openAIModel') as string;
-      
+
       const openAIMaxTokens = vscode.workspace
         .getConfiguration()
         .get('auto-translate-json.openAIMaxTokens') as number;
 
-      if (
-        !googleApiKey &&
-        !awsAccessKeyId &&
-        !awsSecretAccessKey &&
-        !awsRegion &&
-        !azureSecretKey &&
-        !azureRegion &&
-        !deepLProSecretKey &&
-        !deepLFreeSecretKey &&
-        !openAIKey
-      ) {
-        showWarning(
-          'You must provide a Google, AWS, Azure, DeepL or OpenAI parameters first in the extension settings.'
-        );
-
-        return;
-      }
-
-      const config: Configuration = {} as Configuration;
-
-      // set the delimiters for named arguments
       const startDelimiter = vscode.workspace
         .getConfiguration()
         .get('auto-translate-json.startDelimiter') as string;
-
-      if (startDelimiter) {
-        config.startDelimiter = startDelimiter;
-      }
 
       const endDelimiter = vscode.workspace
         .getConfiguration()
         .get('auto-translate-json.endDelimiter') as string;
 
-      if (endDelimiter) {
-        config.endDelimiter = endDelimiter;
-      }
-
       const ignorePrefix = vscode.workspace
         .getConfiguration()
         .get('auto-translate-json.ignorePrefix') as string;
-
-      config.ignorePrefix = '';
-
-      if (ignorePrefix) {
-        config.ignorePrefix = ignorePrefix.trim();
-      }
-
-
-      if (googleApiKey) {
-        config.translationKeyInfo = {
-          kind: 'google',
-          apiKey: googleApiKey
-        };
-      } else if (awsAccessKeyId && awsSecretAccessKey && awsRegion) {
-        config.translationKeyInfo = {
-          kind: 'aws',
-          accessKeyId: awsAccessKeyId,
-          secretAccessKey: awsSecretAccessKey,
-          region: awsRegion
-        };
-      } else if (azureSecretKey && azureRegion) {
-        config.translationKeyInfo = {
-          kind: 'azure',
-          secretKey: azureSecretKey,
-          region: azureRegion
-        };
-      } else if (deepLFreeSecretKey) {
-        config.translationKeyInfo = {
-          kind: 'deepLFree',
-          secretKey: deepLFreeSecretKey
-        };
-      } else if (deepLProSecretKey) {
-        config.translationKeyInfo = {
-          kind: 'deepLPro',
-          secretKey: deepLProSecretKey
-        };
-      } else if (openAIKey) {
-
-        config.translationKeyInfo = {
-          kind: 'openai',
-          apiKey: openAIKey,
-          baseUrl: openAIBaseURL,
-          model: openAIModel,
-          maxTokens: openAIMaxTokens,
-          temperature: 0,
-          topP: 1,
-          n: 1,
-          frequencyPenalty: 0,
-          presencePenalty: 0
-        };
-      } else {
-        showWarning(
-          'You must provide a Google, AWS, Azure, DeepL or OpenAI parameters first in the extension settings.'
-        );
-        return;
-      }
-
-      // inform user if running the extension from the command bar
-      if (resource === undefined) {
-        showMessage(
-          'You must run this extension by right clicking on a .json file',
-          ''
-        );
-        return;
-      }
 
       const fileMode =
         (vscode.workspace.getConfiguration().get('auto-translate-json.mode') as
           | 'file'
           | 'folder') ?? 'file';
 
-      config.mode = fileMode;
-
-      config.sourceLocale = vscode.workspace
+      const sourceLocale = vscode.workspace
         .getConfiguration()
         .get('auto-translate-json.sourceLocale') as string;
+
+      const config: Configuration = {} as Configuration;
+      config.ignorePrefix = '';
+      config.mode = fileMode;
+      config.sourceLocale = sourceLocale;
+
+      if (startDelimiter) {
+        config.startDelimiter = startDelimiter;
+      }
+
+      if (endDelimiter) {
+        config.endDelimiter = endDelimiter;
+      }
+
+      if (ignorePrefix) {
+        config.ignorePrefix = ignorePrefix.trim();
+      }
+
+      // Build the config based on the desired type
+      showWarning('Selected API is ' + apiType);
+      switch (apiType) {
+        case 'Google': {
+          if (googleApiKey) {
+            config.translationKeyInfo = {
+              kind: 'google',
+              apiKey: googleApiKey
+            };
+            break;
+          } else {
+            showWarning(
+              'You must provide `googleApiKey` parameter first in the extension settings.'
+            );
+            return;
+          }
+        }
+
+        case 'AWS': {
+          if (awsAccessKeyId && awsSecretAccessKey && awsRegion) {
+            config.translationKeyInfo = {
+              kind: 'aws',
+              accessKeyId: awsAccessKeyId,
+              secretAccessKey: awsSecretAccessKey,
+              region: awsRegion
+            };
+            break;
+          } else {
+            showWarning(
+              'You must provide the `awsAccessKeyId`, `awsSecretAccessKey`, and `awsRegion` parameters first in the extension settings.'
+            );
+            return;
+          }
+        }
+
+        case 'Azure': {
+          if (azureSecretKey && azureRegion) {
+            config.translationKeyInfo = {
+              kind: 'azure',
+              secretKey: azureSecretKey,
+              region: azureRegion
+            };
+            break;
+          } else {
+            showWarning(
+              'You must provide `azureSecretKey` and `azureRegion` parameters first in the extension settings.'
+            );
+            return;
+          }
+        }
+
+        case 'DeepL': {
+          if (deepLFreeSecretKey) {
+            config.translationKeyInfo = {
+              kind: 'deepLFree',
+              secretKey: deepLFreeSecretKey
+            };
+            break;
+          } else if (deepLProSecretKey) {
+            config.translationKeyInfo = {
+              kind: 'deepLPro',
+              secretKey: deepLProSecretKey
+            };
+            break;
+          } else {
+            showWarning(
+              'You must provide the `deepLFreeSecretKey` or `deepLProSecretKey` parameter first in the extension settings.'
+            );
+            return;
+          }
+        }
+
+        case 'OpenAI': {
+          if (openAIKey) {
+            config.translationKeyInfo = {
+              kind: 'openai',
+              apiKey: openAIKey,
+              baseUrl: openAIBaseURL,
+              model: openAIModel,
+              maxTokens: openAIMaxTokens,
+              temperature: 0,
+              topP: 1,
+              n: 1,
+              frequencyPenalty: 0,
+              presencePenalty: 0
+            };
+            break;
+          } else {
+            showWarning(
+              'You must provide the `openAIKey` parameter first in the extension settings.'
+            );
+            return;
+          }
+        }
+
+        default: {
+          showWarning('Error: Invalid API Type');
+          return;
+        }
+      }
 
       // ask user to pick options
       const keepTranslations = await askToPreserveTranslations();
@@ -190,6 +224,7 @@ export function activate(context: vscode.ExtensionContext) {
       } else {
         config.keepTranslations = 'retranslate';
       }
+
       const keepExtras = await askToKeepExtra();
       if (keepExtras === null) {
         showWarning('You must select a keep option');
@@ -264,4 +299,4 @@ async function askToKeepExtra(): Promise<boolean | null> {
   return keepExtra;
 }
 // this method is called when your extension is deactivated
-export function deactivate() { }
+export function deactivate() {}

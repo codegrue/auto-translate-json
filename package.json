@@ -41,6 +41,18 @@
             "default": "en",
             "markdownDescription": "The local to use for generation from. This prevents accidentally clicking the wrong file. Leave blank to process from any file."
           },
+          "auto-translate-json.apiType": {
+            "type": "string",
+            "enum": [
+              "Google",
+              "AWS",
+              "Azure",
+              "DeepL",
+              "OpenAI"
+            ],
+            "default": "Google",
+            "markdownDescription": "Which API will you use for processing?"
+          },
           "auto-translate-json.startDelimiter": {
             "type": "string",
             "default": "{",
@@ -55,7 +67,7 @@
             "type": "string",
             "default": "",
             "markdownDescription": "Ignore prefix for translation key"
-          }           
+          }
         }
       },
       {
@@ -90,7 +102,7 @@
       },
       {
         "title": "Azure",
-        "properties": {          
+        "properties": {
           "auto-translate-json.azureRegion": {
             "type": "string",
             "default": "",
@@ -105,7 +117,7 @@
       },
       {
         "title": "OpenAI",
-        "properties": {                 
+        "properties": {
           "auto-translate-json.openAIKey": {
             "type": "string",
             "default": "",
@@ -139,7 +151,7 @@
       },
       {
         "title": "DeepL",
-        "properties": {                 
+        "properties": {
           "auto-translate-json.deepLProSecretKey": {
             "type": "string",
             "default": "",
