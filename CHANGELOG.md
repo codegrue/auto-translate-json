@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.5.4] - 2025-07-30
+
+- retry on 429 error
+- use new version of library 1.5.1 [topce]
+
 ## [1.5.1] - 2025-07-19
 
 - update to use same version like library
