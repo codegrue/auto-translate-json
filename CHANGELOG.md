@@ -1,9 +1,10 @@
 # Change Log
 
-## [1.5.1] - 2025-07-19
+## [1.5.1] - 2025-07-30
 
 - update to use same version like library
 - use new version of library 1.5.1 [topce]
+- added explicit field to pick the translation you want to use
 
 ## [1.3.8] - 2023-10-20
 
@@ -16,18 +17,18 @@
 ## [1.3.4] - 2023-10-20
 
 - use new version of library 1.3.5 [topce]
-- fix error in  deepL  [alexei-petru]
-- load dynamically google supported languages [BenGMiles] 
+- fix error in deepL [alexei-petru]
+- load dynamically google supported languages [BenGMiles]
 
 ## [1.3.3] - 2023-06-25
 
 - use new version of library 1.2.3 [topce]
-- fix typo in deepL urls [topce] 
+- fix typo in deepL urls [topce]
 
 ## [1.3.2] - 2023-06-25
 
 - use new version of library 1.2.2 [topce]
-- improve error logs [topce] 
+- improve error logs [topce]
 - not call process exit in library [topce]
 - update libs dependencies [topce]
 
@@ -43,6 +44,7 @@
 ## [1.2.0] - 2023-05-12
 
 - Moved backend code to an external library
+
 ## [1.1.4] - 2022-06-21
 
 - Added support for DeepL [topce]

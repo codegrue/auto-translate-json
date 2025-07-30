@@ -31,6 +31,7 @@
     "auto-translate-json"
   ],
   "main": "./out/extension.js",
+  "activationEvents": [],
   "contributes": {
     "configuration": [
       {
