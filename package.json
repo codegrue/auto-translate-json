@@ -3,7 +3,7 @@
   "displayName": "Auto Translate JSON",
   "description": "Automatically translates JSON language files to other languages using Google Translate",
   "publisher": "jeffjorczak",
-  "version": "1.5.4",
+  "version": "1.5.5",
   "license": "MIT",
   "icon": "images/icon.png",
   "author": {
@@ -212,7 +212,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "auto-translate-json-library": "1.5.4",
+    "auto-translate-json-library": "github:topce/auto-translate-json-library",
     "es2020": "^1.1.9"
   }
 }

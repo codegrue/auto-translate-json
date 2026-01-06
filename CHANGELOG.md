@@ -1,15 +1,17 @@
 # Change Log
 
-<<<<<<< HEAD
-## [1.5.1] - 2025-07-30
-=======
+## [1.5.5] - 2026-01-06
+
+- updated library to support multiple formats not just json [topce]
+- added demo <https://github.com/topce/auto-translate-json-library/tree/master/demo> to demo in file mode [topce]
+- added demo <https://github.com/topce/auto-translate-json-library/tree/master/demo-folder> to demo folder mode [topce]
+
 ## [1.5.4] - 2025-07-30
 
 - retry on 429 error
-- use new version of library 1.5.1 [topce]
+- use new version of library 1.5.4 [topce]
 
 ## [1.5.1] - 2025-07-19
->>>>>>> d2540c65adce64423ecdce1ebeca9e28e8d89ee0
 
 - update to use same version like library
 - use new version of library 1.5.1 [topce]
