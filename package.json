@@ -1,9 +1,9 @@
 {
   "name": "auto-translate-json",
   "displayName": "Auto Translate JSON",
-  "description": "Automatically translates JSON language files to other languages using Google Translate",
+  "description": "Automatically translates JSON, XML, YAML, ARB, PO, XLIFF, CSV, Properties and more to other languages using Google, AWS, Azure, DeepL, or OpenAI",
   "publisher": "jeffjorczak",
-  "version": "1.5.5",
+  "version": "2.0.2",
   "license": "MIT",
   "icon": "images/icon.png",
   "author": {
@@ -15,7 +15,7 @@
     "url": "https://github.com/codegrue/auto-translate-json"
   },
   "engines": {
-    "vscode": "^1.102.0"
+    "vscode": "^1.108.0"
   },
   "categories": [
     "Formatters"
@@ -30,7 +30,7 @@
     "transloco",
     "auto-translate-json"
   ],
-  "main": "./out/extension.js",
+  "main": "./out/main.js",
   "activationEvents": [],
   "contributes": {
     "configuration": [
@@ -68,6 +68,37 @@
             "type": "string",
             "default": "",
             "markdownDescription": "Ignore prefix for translation key"
+          },
+          "auto-translate-json.format": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "json",
+              "xml",
+              "android-xml",
+              "ios-xml",
+              "yaml",
+              "arb",
+              "po",
+              "pot",
+              "xliff",
+              "xmb",
+              "xtb",
+              "properties",
+              "csv",
+              "tsv"
+            ],
+            "default": "auto",
+            "markdownDescription": "File format for translation. Use 'auto' for automatic detection based on file extension."
+          },
+          "auto-translate-json.mode": {
+            "type": "string",
+            "default": "file",
+            "enum": [
+              "file",
+              "folder"
+            ],
+            "markdownDescription": "'file': files in same folder like 'en.json'...; 'folder': files in subfolders like 'en/translation.json'"
           }
         }
       },
@@ -136,17 +167,15 @@
           },
           "auto-translate-json.openAIMaxTokens": {
             "type": "number",
-            "default": 256,
+            "default": 1000,
             "markdownDescription": "OpenAI max tokens"
           },
-          "auto-translate-json.mode": {
-            "type": "string",
-            "default": "file",
-            "enum": [
-              "file",
-              "folder"
-            ],
-            "markdownDescription": "\"file\": files in same folder like \"en.json\"...; \"folder\": files in subfolders like \"en/translation.json\""
+          "auto-translate-json.openAITemperature": {
+            "type": "number",
+            "default": 0.1,
+            "minimum": 0,
+            "maximum": 2,
+            "markdownDescription": "OpenAI temperature (0-2). Lower values produce more consistent translations."
           }
         }
       },
@@ -169,13 +198,13 @@
     "commands": [
       {
         "command": "extension.autotranslate",
-        "title": "Auto Translate JSON"
+        "title": "Auto Translate"
       }
     ],
     "menus": {
       "explorer/context": [
         {
-          "when": "resourceExtname == .json",
+          "when": "resourceExtname == .json || resourceExtname == .xml || resourceExtname == .yaml || resourceExtname == .yml || resourceExtname == .arb || resourceExtname == .po || resourceExtname == .pot || resourceExtname == .xlf || resourceExtname == .xliff || resourceExtname == .xmb || resourceExtname == .xtb || resourceExtname == .properties || resourceExtname == .csv || resourceExtname == .tsv",
           "command": "extension.autotranslate",
           "group": "navigation"
         }
@@ -199,20 +228,20 @@
   "devDependencies": {
     "@types/glob": "^9.0.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^24.1.0",
-    "@types/vscode": "^1.102.0",
-    "@typescript-eslint/eslint-plugin": "^8.38.0",
-    "@typescript-eslint/parser": "^8.38.0",
+    "@types/node": "^25.1.0",
+    "@types/vscode": "^1.108.1",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
     "@vscode/test-electron": "^2.5.2",
-    "esbuild": "^0.25.8",
-    "eslint": "^9.32.0",
-    "glob": "^11.0.3",
-    "mocha": "^11.7.1",
-    "prettier": "^3.6.2",
-    "typescript": "^5.8.3"
+    "@vscode/vsce": "^3.7.1",
+    "esbuild": "^0.27.2",
+    "eslint": "^9.39.2",
+    "glob": "^13.0.0",
+    "mocha": "^11.7.5",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
-    "auto-translate-json-library": "github:topce/auto-translate-json-library",
-    "es2020": "^1.1.9"
+    "auto-translate-json-library": "^2.0.2"
   }
 }

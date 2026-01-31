@@ -1,22 +1,37 @@
 # Auto Translate JSON
 
-Adds a menu item to JSON files to automatically translate them into other languages using Google Translate, Aws Translate, Azure Translate, DeepL or OpenAI.
+Adds a context menu item to translation files to automatically translate them into other languages using Google Translate, AWS Translate, Azure Translate, DeepL, or OpenAI (including local AI via Ollama).
+
+## Supported File Formats
+
+- **JSON** - Standard JSON translation files
+- **XML** - Android strings.xml, iOS plist, generic XML
+- **YAML** - YAML/YML configuration files
+- **ARB** - Flutter Application Resource Bundle
+- **PO/POT** - GNU Gettext translation files
+- **XLIFF** - XML Localization Interchange File Format
+- **XMB/XTB** - XML Message Bundle (Angular)
+- **Properties** - Java/Spring properties files
+- **CSV/TSV** - Comma/Tab-separated values
 
 ## How it works
 
 ![demo](images/demo.gif)
 
-When localizing an application, if you have a folder called something like `translations`, `languages`, or `i18n` that contains JSON files for each language, you can use this extension to right click on your primary language file and automatically create additional translations. It uses the Google/AWS/Azure Translate API to perform the translations, and you must have your own API key to make the calls.
+When localizing an application, if you have a folder called something like `translations`, `languages`, or `i18n` that contains translation files for each language, you can use this extension to right click on your primary language file and automatically create additional translations. It uses the Google/AWS/Azure/DeepL/OpenAI Translate API to perform the translations, and you must have your own API key to make the calls.
 
-Just create empty files with the locale names as filenames and this extension will generate their translations. For example, if you want French, create a file `fr.json`. Right click on `en.json`, pick "Auto Translate JSON" and voilà, you have a version in French.
+Just create empty files with the locale names as filenames and this extension will generate their translations. For example, if you want French, create a file `fr.json`. Right click on `en.json`, pick "Auto Translate" and voilà, you have a version in French.
 
 ## Features
 
+- **Multi-format support** - Works with JSON, XML, YAML, ARB, PO, XLIFF, Properties, CSV, and more
+- **Format auto-detection** - Automatically detects file format based on extension and content
 - Option to keep existing translations, to cut down on data processing when adding new terms
 - Option to keep extra translations, if one language has additional unique terms
-- Supports nested JSON elements
+- Supports nested elements in JSON, XML, and YAML
 - Supports named arguments such as: "Zip code {zip} is in {city}, {state}."
-- processes all files simultaneously
+- Processes all files simultaneously
+- **Local AI support** - Use Ollama or other OpenAI-compatible local servers
 
 ## Supported languages
 
@@ -54,30 +69,44 @@ API key:<https://platform.openai.com/>
 
 4. Enter your Google/AWS/Azure API key / access key / subscription key / region
 5. (optional) Change the `Source Locale` setting if you don't want English
-6. Create empty files for each locale you want to translate into.
-   Locale should correspond to the language code used by the translation service. For example, if you want French, create a file `fr.json`.If you use Azure and want to translate into Serbian , create a file `sr-Cyrl.json` for Serbian Cyrillic translation or `sr-Latn.json` for Serbian Latin translation.If you use AWS or Google and want to translate into Serbian , create a file `sr.json` for Serbian translation.
+6. (optional) Set the `Format` setting or leave as "auto" for automatic detection
+7. Create empty files for each locale you want to translate into.
+   Locale should correspond to the language code used by the translation service. For example, if you want French, create a file `fr.json` (or `fr.xml`, `fr.yaml`, etc.).
+   
+   - If you use Azure and want to translate into Serbian, create a file `sr-Cyrl.json` for Serbian Cyrillic translation or `sr-Latn.json` for Serbian Latin translation.
+   - If you use AWS or Google and want to translate into Serbian, create a file `sr.json` for Serbian translation.
 
    ![files](images/files.png)
 
-7. Right click the source .json file (en.json by default) and pick "Auto Translate JSON"
-8. At the prompt decide if you want to preserve previously translated values (i.e. not reprocess)
+8. Right click the source translation file (en.json, en.xml, en.yaml, etc.) and pick "Auto Translate"
+9. At the prompt decide if you want to preserve previously translated values (i.e. not reprocess)
 
    ![preserve-existing](images/preserve-existing.png)
 
-9. At the prompt decide if you want to keep extra translations
+10. At the prompt decide if you want to keep extra translations
 
    ![keep-existing](images/keep-extra.png)
 
-10. Verify your language files have been updated
+11. Verify your language files have been updated
 
 
 ## Extension Settings
 
 This extension contributes the following settings (Menu>Preferences>Settings):
 
+### General
+
 - `auto-translate-json.sourceLocale`: A failsafe to prevent processing the wrong file. Defaults to "en" for english. You can change this to any valid two letter locale code you wish to use.
 
-- `auto-translate-json.mode`: \"file\": files in same folder like \"en.json\"...; \"folder\": files in subfolders like \"en/translation.json\
+- `auto-translate-json.mode`: "file": files in same folder like "en.json"...; "folder": files in subfolders like "en/translation.json"
+
+- `auto-translate-json.format`: File format for translation. Use "auto" for automatic detection based on file extension. Supported formats: json, xml, android-xml, ios-xml, yaml, arb, po, pot, xliff, xmb, xtb, properties, csv, tsv
+
+- `auto-translate-json.startDelimiter`: Start delimiter for named arguments. Defaults to "{". Use "{{" for ngx-translate or transloco.
+
+- `auto-translate-json.endDelimiter`: End delimiter for named arguments. Defaults to "}". Use "}}" for ngx-translate or transloco.
+
+- `auto-translate-json.ignorePrefix`: Translation keys that start with this prefix will be ignored (e.g., "@@" for ARB metadata)
 
 ### Google
 
@@ -105,46 +134,52 @@ This extension contributes the following settings (Menu>Preferences>Settings):
 
 - `auto-translate-json.deepLProSecurityKey`: Enter your DeepL Pro security key in this setting.
 
-### Open AI
+### OpenAI
 
-- `auto-translate-json.openAIKey`: Enter your OpenAI security key in this setting.
+- `auto-translate-json.openAIKey`: Enter your OpenAI API key in this setting.
+- `auto-translate-json.openAIBaseURL`: Base URL for OpenAI API. Defaults to "https://api.openai.com/v1". Change for local servers.
+- `auto-translate-json.openAIModel`: Model to use. Defaults to "gpt-4.1-mini" (recommended for translations).
+- `auto-translate-json.openAIMaxTokens`: Maximum tokens per request. Defaults to 1000.
+- `auto-translate-json.openAITemperature`: Temperature (0-2). Lower values produce more consistent translations. Defaults to 0.1.
 
-### Open AI Local server
+### Local AI with Ollama
 
-- install https://jan.ai/
-- download  model mistral-ins-7b-q4
-- run server http://localhost:1337/v1 with model  mistral-ins-7b-q4
-- set up extension parameters
-- `auto-translate-json.openAIKey`: whatever ;-)
-- `auto-translate-json.openAIBaseURL`: http://localhost:1337/v1
-- `auto-translate-json.model`: mistral-ins-7b-q4
-- `auto-translate-json.maxTokens`: 4096
-We do not pay per token because it runs locally ;-)
+1. Install [Ollama](https://ollama.com/)
+2. Pull a recommended model: `ollama pull qwen2.5:14b`
+3. Configure extension settings:
+   - `auto-translate-json.openAIKey`: "ollama" (placeholder)
+   - `auto-translate-json.openAIBaseURL`: "http://localhost:11434/v1"
+   - `auto-translate-json.openAIModel`: "qwen2.5:14b"
+   - `auto-translate-json.openAIMaxTokens`: 512
 
-### Mode
+### Other Local AI Servers
 
-- `auto-translate-json.mode`: Enter \"file\" if translations are files in same folder like \"en.json\"
-   or \"folder\" if translation files are in sub folders like \"en/translation.json\"
-
-### Start delimiter
-
-- `auto-translate-json.startDelimiter`: Start delimiter for named arguments. Defaults to \"{\"
-if you use ngx-translate or ngx-transloco you should use \"{{\"
-
-### End delimiter
-
-- `auto-translate-json.endDelimiter`: End delimiter for named arguments. Defaults to \"}\"
-if you use ngx-translate or ngx-transloco you should use \"}}\"
-
-### Ignore prefix
-
-- `auto-translate-json.ignorePrefix`: Translation keys that starts with ignore prefix will be ignored
+Compatible with any OpenAI-compatible server:
+- [Jan.ai](https://jan.ai/)
+- [LM Studio](https://lmstudio.ai/)
+- [text-generation-webui](https://github.com/oobabooga/text-generation-webui)
+- [vLLM](https://github.com/vllm-project/vllm)
 
 ## Limitations
 
-- files must be named with the locale code that may be different depending on the translation service that you use. Please see the supported languages above.
+- Files must be named with the locale code that may be different depending on the translation service that you use. Please see the supported languages above.
 
-- OpenAI currently supports only translation from English to other languages!
+## Format-Specific Notes
+
+### ARB (Flutter)
+- Keys starting with `@@` (like `@@locale`) are treated as metadata and not translated
+- Set `ignorePrefix` to `@@` to skip metadata keys
+
+### Android XML
+- Automatically detects `<resources>` structure
+- Preserves `translatable="false"` attributes
+
+### PO/POT
+- Preserves headers and metadata
+- Handles plural forms
+
+### XLIFF
+- Supports XLIFF 1.2 and 2.0 formats
 
 ### Prices
 

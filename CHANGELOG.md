@@ -1,5 +1,20 @@
 # Change Log
 
+## [2.0.2] - 2026-01-31
+
+- **Major Update**: Synced version with auto-translate-json-library 2.0.2
+- **Multi-format support**: Added support for XML, YAML, ARB, PO/POT, XLIFF, XMB/XTB, Properties, CSV, TSV formats
+- **Format auto-detection**: Automatically detects file format based on extension and content
+- **New format setting**: Added `auto-translate-json.format` setting to manually override format detection
+- **OpenAI improvements**: 
+  - Added temperature setting for fine-tuning translation creativity
+  - Updated default model to `gpt-4.1-mini`
+  - Increased default max tokens to 1000
+- **Local AI support**: Better support for Ollama and other OpenAI-compatible local servers
+- **Updated context menu**: Now appears for all supported file extensions
+- **Command renamed**: "Auto Translate JSON" → "Auto Translate"
+- Updated VS Code engine requirement to ^1.108.0
+
 ## [1.5.5] - 2026-01-06
 
 - updated library to support multiple formats not just json [topce]

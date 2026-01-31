@@ -2,7 +2,13 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { translate, Configuration } from 'auto-translate-json-library';
-const NAME = 'AutoTranslateJSON';
+const NAME = 'AutoTranslate';
+
+// Supported file extensions
+const SUPPORTED_EXTENSIONS = [
+  '.json', '.xml', '.yaml', '.yml', '.arb', '.po', '.pot',
+  '.xlf', '.xliff', '.xmb', '.xtb', '.properties', '.csv', '.tsv'
+];
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -17,7 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
       // inform user if running the extension from the command bar
       if (resource === undefined) {
         showMessage(
-          'You must run this extension by right clicking on a .json file'
+          'You must run this extension by right clicking on a supported translation file'
         );
         return;
       }
@@ -74,6 +80,10 @@ export function activate(context: vscode.ExtensionContext) {
         .getConfiguration()
         .get('auto-translate-json.openAIMaxTokens') as number;
 
+      const openAITemperature = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.openAITemperature') as number ?? 0.1;
+
       const startDelimiter = vscode.workspace
         .getConfiguration()
         .get('auto-translate-json.startDelimiter') as string;
@@ -85,6 +95,10 @@ export function activate(context: vscode.ExtensionContext) {
       const ignorePrefix = vscode.workspace
         .getConfiguration()
         .get('auto-translate-json.ignorePrefix') as string;
+
+      const format = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.format') as string ?? 'auto';
 
       const fileMode =
         (vscode.workspace.getConfiguration().get('auto-translate-json.mode') as
@@ -110,6 +124,11 @@ export function activate(context: vscode.ExtensionContext) {
 
       if (ignorePrefix) {
         config.ignorePrefix = ignorePrefix.trim();
+      }
+
+      // Set format if not auto
+      if (format && format !== 'auto') {
+        config.format = format;
       }
 
       // Build the config based on the desired type
@@ -189,10 +208,10 @@ export function activate(context: vscode.ExtensionContext) {
             config.translationKeyInfo = {
               kind: 'openai',
               apiKey: openAIKey,
-              baseUrl: openAIBaseURL,
-              model: openAIModel,
-              maxTokens: openAIMaxTokens,
-              temperature: 0,
+              baseUrl: openAIBaseURL || 'https://api.openai.com/v1',
+              model: openAIModel || 'gpt-4.1-mini',
+              maxTokens: openAIMaxTokens || 1000,
+              temperature: openAITemperature,
               topP: 1,
               n: 1,
               frequencyPenalty: 0,
