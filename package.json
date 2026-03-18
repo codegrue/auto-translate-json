@@ -1,9 +1,9 @@
 {
   "name": "auto-translate-json",
   "displayName": "Auto Translate JSON",
-  "description": "Automatically translates JSON, XML, YAML, ARB, PO, XLIFF, CSV, Properties and more to other languages using Google, AWS, Azure, DeepL, or OpenAI",
+  "description": "Automatically translates JSON, XML, YAML, ARB, PO, XLIFF, CSV, Properties and more to other languages using Google, AWS, Azure, DeepL, OpenAI, or Hugging Face (cloud & local)",
   "publisher": "jeffjorczak",
-  "version": "2.0.2",
+  "version": "2.0.5",
   "license": "MIT",
   "icon": "images/icon.png",
   "author": {
@@ -15,7 +15,7 @@
     "url": "https://github.com/codegrue/auto-translate-json"
   },
   "engines": {
-    "vscode": "^1.108.0"
+    "vscode": "^1.110.0"
   },
   "categories": [
     "Formatters"
@@ -49,7 +49,9 @@
               "AWS",
               "Azure",
               "DeepL",
-              "OpenAI"
+              "OpenAI",
+              "HuggingFace",
+              "HuggingFaceLocal"
             ],
             "default": "Google",
             "markdownDescription": "Which API will you use for processing?"
@@ -193,6 +195,36 @@
             "markdownDescription": "Your DeepL Free Secret Key"
           }
         }
+      },
+      {
+        "title": "HuggingFace",
+        "properties": {
+          "auto-translate-json.huggingFaceApiKey": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Your Hugging Face API key"
+          },
+          "auto-translate-json.huggingFaceModel": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Hugging Face model (e.g., Helsinki-NLP/opus-mt-en-fr)"
+          },
+          "auto-translate-json.huggingFaceProvider": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Optional inference provider (e.g., 'hf-inference', 'together', 'replicate', 'auto'). See HuggingFace documentation for available providers."
+          }
+        }
+      },
+      {
+        "title": "HuggingFaceLocal",
+        "properties": {
+          "auto-translate-json.huggingFaceLocalModel": {
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Hugging Face local model (e.g., Xenova/opus-mt-en-fr)"
+          }
+        }
       }
     ],
     "commands": [
@@ -220,7 +252,7 @@
     "pretest": "npm run compile && npm run lint",
     "test": "node ./out/test/runTest.js",
     "format": "prettier --config .prettierrc.json src --write",
-    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --external:onnxruntime-node --external:@huggingface/transformers --format=cjs --platform=node",
     "esbuild": "npm run esbuild-base -- --sourcemap",
     "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
     "test-compile": "tsc -p ./"
@@ -228,20 +260,20 @@
   "devDependencies": {
     "@types/glob": "^9.0.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "^25.1.0",
-    "@types/vscode": "^1.108.1",
-    "@typescript-eslint/eslint-plugin": "^8.54.0",
-    "@typescript-eslint/parser": "^8.54.0",
+    "@types/node": "^25.5.0",
+    "@types/vscode": "^1.110.0",
+    "@typescript-eslint/eslint-plugin": "^8.57.1",
+    "@typescript-eslint/parser": "^8.57.1",
     "@vscode/test-electron": "^2.5.2",
     "@vscode/vsce": "^3.7.1",
-    "esbuild": "^0.27.2",
+    "esbuild": "^0.27.4",
     "eslint": "^9.39.2",
-    "glob": "^13.0.0",
+    "glob": "^13.0.6",
     "mocha": "^11.7.5",
     "prettier": "^3.8.1",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "auto-translate-json-library": "^2.0.2"
+    "auto-translate-json-library": "^2.0.5"
   }
 }

@@ -1,5 +1,16 @@
 # Change Log
 
+## [2.0.5] - 2026-03-18
+
+- **Library sync**: Updated to auto-translate-json-library v2.0.5
+- **Hugging Face integration**: Added support for Hugging Face cloud API translation with multiple inference providers
+- **Local AI translation**: Added Hugging Face local ONNX runtime translation (no API key required, runs offline)
+- **New API types**: Added "HuggingFace" and "HuggingFaceLocal" to apiType enum
+- **Configuration updates**: Added settings for Hugging Face API key, model, provider, and local model
+- **Native module externalization**: Externalized `onnxruntime-node` and `@huggingface/transformers` native modules in esbuild config
+- **Dependency updates**: Updated TypeScript, VS Code API, eslint, and other dependencies
+- **VS Code engine**: Updated engine requirement to ^1.110.0
+
 ## [2.0.2] - 2026-01-31
 
 - **Major Update**: Synced version with auto-translate-json-library 2.0.2

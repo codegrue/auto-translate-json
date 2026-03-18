@@ -1,6 +1,6 @@
 # Auto Translate JSON
 
-Adds a context menu item to translation files to automatically translate them into other languages using Google Translate, AWS Translate, Azure Translate, DeepL, or OpenAI (including local AI via Ollama).
+Adds a context menu item to translation files to automatically translate them into other languages using Google Translate, AWS Translate, Azure Translate, DeepL, OpenAI, or Hugging Face (cloud & local, including local AI via Ollama).
 
 ## Supported File Formats
 
@@ -18,7 +18,7 @@ Adds a context menu item to translation files to automatically translate them in
 
 ![demo](images/demo.gif)
 
-When localizing an application, if you have a folder called something like `translations`, `languages`, or `i18n` that contains translation files for each language, you can use this extension to right click on your primary language file and automatically create additional translations. It uses the Google/AWS/Azure/DeepL/OpenAI Translate API to perform the translations, and you must have your own API key to make the calls.
+When localizing an application, if you have a folder called something like `translations`, `languages`, or `i18n` that contains translation files for each language, you can use this extension to right click on your primary language file and automatically create additional translations. It uses the Google/AWS/Azure/DeepL/OpenAI/Hugging Face Translate API to perform the translations, and you must have your own API key to make the calls.
 
 Just create empty files with the locale names as filenames and this extension will generate their translations. For example, if you want French, create a file `fr.json`. Right click on `en.json`, pick "Auto Translate" and voilà, you have a version in French.
 
@@ -31,6 +31,7 @@ Just create empty files with the locale names as filenames and this extension wi
 - Supports nested elements in JSON, XML, and YAML
 - Supports named arguments such as: "Zip code {zip} is in {city}, {state}."
 - Processes all files simultaneously
+- **Hugging Face integration** - Cloud API with multiple providers or local ONNX runtime for private, offline translation
 - **Local AI support** - Use Ollama or other OpenAI-compatible local servers
 
 ## Supported languages
@@ -40,6 +41,7 @@ Just create empty files with the locale names as filenames and this extension wi
 - Azure: <https://docs.microsoft.com/en-us/azure/cognitive-services/translator/language-support>
 - DeepL: <https://www.deepl.com/docs-api/other-functions/listing-supported-languages/>
 - OpenAI: <https://platform.openai.com/>
+- Hugging Face: <https://huggingface.co/models?pipeline_tag=translation> (supports many languages via different models)
 
 ## Requirements
 
@@ -59,15 +61,20 @@ For DeepL you need to provide your authentication API key. Go here to set up you
 For OpenAI you need to provide just API key.Go here to set up your account and request a key:
 API key:<https://platform.openai.com/>
 
+For Hugging Face cloud API you need to provide an API key and model name. Go here to set up your account and request a key:
+API key:<https://huggingface.co/settings/tokens>
+
+For Hugging Face local mode you need to provide only a model name (no API key required). The model runs locally using transformers.js.
+
 ## Getting Started
 
-1. Request a Google/AWS/Azure/DeepL/OpenAI Translate API key
+1. Request a Google/AWS/Azure/DeepL/OpenAI/Hugging Face Translate API key (or use Hugging Face local mode without API key)
 2. Install this extension
 3. Go to VSCode `Settings>Extensions>Auto Translate JSON`
 
    ![settings](images/settings.png)
 
-4. Enter your Google/AWS/Azure API key / access key / subscription key / region
+4. Enter your Google/AWS/Azure/DeepL/OpenAI/Hugging Face API key / access key / subscription key / region / model (or use Hugging Face local mode with model name only)
 5. (optional) Change the `Source Locale` setting if you don't want English
 6. (optional) Set the `Format` setting or leave as "auto" for automatic detection
 7. Create empty files for each locale you want to translate into.
@@ -142,6 +149,83 @@ This extension contributes the following settings (Menu>Preferences>Settings):
 - `auto-translate-json.openAIMaxTokens`: Maximum tokens per request. Defaults to 1000.
 - `auto-translate-json.openAITemperature`: Temperature (0-2). Lower values produce more consistent translations. Defaults to 0.1.
 
+### Hugging Face (Cloud)
+
+- `auto-translate-json.huggingFaceApiKey`: Enter your Hugging Face API key in this setting.
+- `auto-translate-json.huggingFaceModel`: Model to use (e.g., "Helsinki-NLP/opus-mt-en-fr" for English to French).
+- `auto-translate-json.huggingFaceProvider`: Optional inference provider (e.g., "hf-inference", "together", "replicate", "auto"). Leave empty for default ("auto" selects the first available provider). See the "Using Hugging Face Translation" section below for detailed explanation.
+
+### Hugging Face (Local)
+
+- `auto-translate-json.huggingFaceLocalModel`: Model to use for local inference (e.g., "Xenova/opus-mt-en-fr"). Runs locally using transformers.js with ONNX runtime.
+
+### Using Hugging Face Translation
+
+This extension supports both Hugging Face cloud API and local on-device inference.
+
+#### Cloud API (Requires Hugging Face API Key)
+
+1. **Get a Hugging Face API key**:
+   - Create a free account at [huggingface.co](https://huggingface.co)
+   - Generate an access token at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)
+
+2. **Choose a translation model**:
+   - Browse available models at [huggingface.co/models?pipeline_tag=translation](https://huggingface.co/models?pipeline_tag=translation)
+   - Popular models include:
+     - `Helsinki-NLP/opus-mt-en-fr` (English → French)
+     - `Helsinki-NLP/opus-mt-en-es` (English → Spanish)
+     - `Helsinki-NLP/opus-mt-en-de` (English → German)
+     - `facebook/m2m100_418M` (multilingual)
+
+3. **Configure extension settings**:
+   - `auto-translate-json.apiType`: Set to "HuggingFace"
+   - `auto-translate-json.huggingFaceApiKey`: Your Hugging Face API key
+   - `auto-translate-json.huggingFaceModel`: Model name (e.g., "Helsinki-NLP/opus-mt-en-fr")
+   - `auto-translate-json.huggingFaceProvider`: Optional provider (e.g., "hf-inference", "together", "replicate", "auto"). Leave empty for default.
+
+   **About the Provider Parameter:**
+   The `huggingFaceProvider` setting is optional and specifies which inference provider to use:
+   - `"hf-inference"`: Hugging Face's official Inference API (default when available)
+   - `"together"`: Together AI's inference platform
+   - `"replicate"`: Replicate's hosted models
+   - `"auto"`: Automatically selects the first available provider (default if left empty)
+
+   You typically don't need to set this unless:
+   - You have a specific provider preference (e.g., using Together AI credits)
+   - You encounter issues with the default provider
+   - You want to explicitly use a particular inference backend
+
+4. **Usage notes**:
+   - Cloud API requires internet connection
+   - Translation quality depends on the selected model
+   - Check model documentation for supported language pairs
+   - Some models support direct language pairs (en→fr), others are multilingual
+
+#### Local Mode (No API Key Required)
+
+1. **Choose a local ONNX model**:
+   - Models must be compatible with `@huggingface/transformers` JavaScript runtime
+   - Popular local models use the "Xenova/" prefix:
+     - `Xenova/opus-mt-en-fr` (English → French)
+     - `Xenova/m2m100_418M` (multilingual)
+
+> **Note:** Helsinki-NLP models only work with the cloud API and will fail with "Could not locate file: tokenizer.json" error when used locally.
+
+2. **Configure extension settings**:
+   - `auto-translate-json.apiType`: Set to "HuggingFaceLocal"
+   - `auto-translate-json.huggingFaceLocalModel`: Model name (e.g., "Xenova/opus-mt-en-fr")
+
+3. **First run behavior**:
+   - Model weights (~300MB) are downloaded and cached automatically
+   - Subsequent runs use the cached model
+   - No internet required after initial download
+
+4. **Performance considerations**:
+   - Local inference runs on your CPU (or GPU if available)
+   - Translation speed depends on model size and hardware
+   - Larger models provide better quality but are slower
+   - Recommended for batch translations or privacy-sensitive projects
+
 ### Local AI with Ollama
 
 1. Install [Ollama](https://ollama.com/)
@@ -202,6 +286,10 @@ Compatible with any OpenAI-compatible server:
 - OpenAI
 
 <https://openai.com/pricing>
+
+- Hugging Face
+
+<https://huggingface.co/pricing> (cloud API) | Local mode is free but requires local resources
 
 ### WARNING
 

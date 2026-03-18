@@ -84,6 +84,22 @@ export function activate(context: vscode.ExtensionContext) {
         .getConfiguration()
         .get('auto-translate-json.openAITemperature') as number ?? 0.1;
 
+      const huggingFaceApiKey = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.huggingFaceApiKey') as string;
+
+      const huggingFaceModel = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.huggingFaceModel') as string;
+
+      const huggingFaceProvider = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.huggingFaceProvider') as string;
+
+      const huggingFaceLocalModel = vscode.workspace
+        .getConfiguration()
+        .get('auto-translate-json.huggingFaceLocalModel') as string;
+
       const startDelimiter = vscode.workspace
         .getConfiguration()
         .get('auto-translate-json.startDelimiter') as string;
@@ -221,6 +237,38 @@ export function activate(context: vscode.ExtensionContext) {
           } else {
             showWarning(
               'You must provide the `openAIKey` parameter first in the extension settings.'
+            );
+            return;
+          }
+        }
+
+        case 'HuggingFace': {
+          if (huggingFaceApiKey && huggingFaceModel) {
+            config.translationKeyInfo = {
+              kind: 'huggingface',
+              apiKey: huggingFaceApiKey,
+              model: huggingFaceModel,
+              provider: huggingFaceProvider ? huggingFaceProvider as any : undefined
+            };
+            break;
+          } else {
+            showWarning(
+              'You must provide `huggingFaceApiKey` and `huggingFaceModel` parameters first in the extension settings.'
+            );
+            return;
+          }
+        }
+
+        case 'HuggingFaceLocal': {
+          if (huggingFaceLocalModel) {
+            config.translationKeyInfo = {
+              kind: 'huggingface-local',
+              model: huggingFaceLocalModel
+            };
+            break;
+          } else {
+            showWarning(
+              'You must provide `huggingFaceLocalModel` parameter first in the extension settings.'
             );
             return;
           }
