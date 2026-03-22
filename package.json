@@ -3,7 +3,7 @@
   "displayName": "Auto Translate JSON",
   "description": "Automatically translates JSON, XML, YAML, ARB, PO, XLIFF, CSV, Properties and more to other languages using Google, AWS, Azure, DeepL, OpenAI, or Hugging Face (cloud & local)",
   "publisher": "jeffjorczak",
-  "version": "2.0.5",
+  "version": "2.1.0",
   "license": "MIT",
   "icon": "images/icon.png",
   "author": {
@@ -274,6 +274,6 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "auto-translate-json-library": "^2.0.5"
+    "auto-translate-json-library": "^2.1.0"
   }
 }

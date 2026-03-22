@@ -1,5 +1,13 @@
 # Change Log
 
+## [2.1.0] - 2026-03-22
+
+- **Performance improvements**: Updated to auto-translate-json-library v2.1.0 with lazy loading for all translation providers
+- **Faster startup**: ~80MB memory reduction and ~500ms faster extension activation
+- **LLM-friendly CLI**: Library now supports structured JSON output for better integration with AI tools
+- **Enhanced developer experience**: Improved error messages and comprehensive examples in library
+- **Backward compatibility**: All existing functionality preserved with performance optimizations
+
 ## [2.0.5] - 2026-03-18
 
 - **Library sync**: Updated to auto-translate-json-library v2.0.5
