@@ -274,6 +274,6 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "auto-translate-json-library": "^2.1.0"
+    "auto-translate-json-library": "^2.2.0"
   }
 }
